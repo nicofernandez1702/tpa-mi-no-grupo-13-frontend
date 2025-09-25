@@ -1,0 +1,14 @@
+.texto {
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:6px
+}
+
+.base_text {
+ color:var(--text); 
+}
+
+.container {
+  width: 100%;
+}

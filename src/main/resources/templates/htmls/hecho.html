@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Hecho · MetaMapa</title>
+    <link href="../css/Generales.css" rel="stylesheet" />
+    <link href="../css/Hechos.css" rel="stylesheet" />
+    <link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" rel="stylesheet" />
+    <link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" rel="stylesheet" />
+</head>
+
+<body>
+    <header class="mm-header">
+        <div class="mm-header-top"><a class="mm-brand" href="landing.html">MetaMapa</a>
+            <nav class="mm-nav"><span class="mm-page">Hecho</span><a class="mm-link" href="menu_Colecciones.html">Colecciones</a><a class="mm-link" href="login.html" id="nav-login">Login</a><a class="mm-link" href="register.html" id="nav-register">Registrarte</a>
+                <div
+                class="mm-profile" hidden="" id="nav-profile">
+                    <button class="mm-btn">Mi Perfil</button>
+                    <div class="mm-dropdown"><a class="mm-dd-item" href="mi_perfil.html">Ir a mi perfil</a><a class="mm-dd-item" href="panel_control.html" id="dd-panel">Ir a Panel de control</a></div>
+        </div>
+        </nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>Hecho</h1>
+        <div id="map" style="height: 360px; border-radius: 16px; margin: 12px 0;"></div>
+        <section class="grid cols-2">
+            <div class="card">
+                <h2>Nombre del hecho</h2>
+                <p>Ejemplo: Tala de árboles en Francia.</p>
+                <img alt="Imagen ejemplo" src="../img/img2.jpg" style="max-width: 500px; max-height: 1000px; border-radius:12px;" />
+            </div>
+            <div class="card">
+                <h3>Metadatos</h3>
+                <ul class="meta">
+                    <li>
+                        <strong class="li">Categoría:</strong>
+                        <span> Medioambiente</span>
+                    </li>
+                    <li>
+                        <strong class="li">Fecha:</strong>
+                        <span class="span">2025-08-15</span>
+                    </li>
+                    <li>
+                        <strong class="li">Fuente:</strong>
+                        <span class="span">Dinámica</span>
+                    </li>
+                    <li>
+                        <strong class="li">Ubicación:</strong>
+                        <span class="span">París, Francia</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <div class="card" style="margin-top:16px">
+            <div class="content">
+                <h2>Descripción</h2>
+                <p data-field="descripcion" class="descripcion">
+                  TEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTOTEXTO
+                </p>
+                <div class="actions">
+                    <button class="btn" href="menu_Colecciones.html">Volver a colección</button>
+                </div>
+            </div>
+          </div>
+    </main>
+    <footer class="footer">
+        <div>© 2025 MetaMapa - Todos los derechos reservados</div>
+        <div><a href="https://www.argentina.gob.ar/">Información legal y privacidad</a></div>
+    </footer>
+    <script src="assets/app.js"></script>
+    <script crossorigin="" integrity="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script crossorigin="" integrity="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([48.8566, 2.3522], 3);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);
+          L.marker([48.8566, 2.3522]).addTo(map).bindPopup('Tala de árboles en Francia');
+    </script>
+</body>
+
+</html>

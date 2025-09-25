@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Visualizador Collecciones · MetaMapa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+    <style>
+        #map {
+          height: 400px;
+          border-radius: 12px;
+        }
+    </style>
+    </link>
+    <link href="../css/Generales.css" rel="stylesheet" />
+    <link href="../css/visualizador_colecciones.css" rel="stylesheet" />
+</head>
+
+<body>
+    <header class="mm-header">
+        <div class="mm-header-top"><a class="mm-brand" href="landing.html">MetaMapa</a>
+            <nav class="mm-nav"><span class="mm-page">Visualizador Colecciones</span><a class="mm-link" href="menu_Colecciones.html">Colecciones</a><a class="mm-link" href="login.html" id="nav-login">Login</a><a class="mm-link" href="register.html" id="nav-register">Registrarte</a>
+                <div
+                class="mm-profile" hidden="" id="nav-profile">
+                    <button class="mm-btn">Mi Perfil</button>
+                    <div class="mm-dropdown"><a class="mm-dd-item" href="mi_perfil.html">Ir a mi perfil</a><a class="mm-dd-item" href="panel_control.html" id="dd-panel">Ir a Panel de control</a></div>
+        </div>
+        </nav>
+        </div>
+    </header>
+    <!-- Hero para la pantalla de colecciones -->
+
+    <!-- Selector de colecciones y filtros -->
+    <section class="py-5">
+        <div class="container">
+          <h1 style="padding-bottom: 20px;">Visualizador de colecciones</h1>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold" for="coleccionSelect">Seleccionar colección:</label>
+                    <select class="form-select" id="coleccionSelect">
+                        <option value="1">Eventos Climáticos</option>
+                        <option value="2">Actividad Social</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold" for="filtroCategoria">Filtrar por categoría:</label>
+                    <input class="form-control" id="filtroCategoria" placeholder="Escriba la categoría..." type="text" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Mapa interactivo -->
+    <main class="container">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4">Mapa de hechos</h2>
+            <div id="map"></div>
+        </div>
+    </main>
+    <!-- Listado de hechos -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="fw-bold mb-4 text-center">Hechos de la colección</h2>
+            <ul class="list-group" id="hechosList"></ul>
+        </div>
+    </section>
+    <!-- Footer (igual que la landing) -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Datos de ejemplo
+        const colecciones = {
+          1: {
+            nombre: "Eventos Climáticos",
+            hechos: [
+              {id:1, titulo:"Tormenta fuerte", desc:"Lluvias intensas en Retiro", fecha:"2025-08-20", categoria:"Clima", fuente:"Ciudad", coords:[-34.61,-58.39]},
+              {id:2, titulo:"Corte de luz", desc:"Reportado en San Telmo", fecha:"2025-08-19", categoria:"Infraestructura", fuente:"Usuario", coords:[-34.60,-58.38]}
+            ]
+          },
+          2: {
+            nombre: "Actividad Social",
+            hechos: [
+              {id:3, titulo:"Manifestación", desc:"Concentración en Plaza de Mayo", fecha:"2025-08-18", categoria:"Evento", fuente:"Medios", coords:[-34.62,-58.37]}
+            ]
+          }
+        };
+    
+        // Inicializar mapa
+        const map = L.map('map').setView([-34.61, -58.38], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+    
+        let markers = [];
+    
+        function renderColeccion(id) {
+          const coleccion = colecciones[id];
+          const hechosList = document.getElementById('hechosList');
+          const filtro = document.getElementById('filtroCategoria').value.toLowerCase();
+    
+          // Limpiar lista y marcadores
+          hechosList.innerHTML = '';
+          markers.forEach(m => map.removeLayer(m));
+          markers = [];
+    
+          coleccion.hechos
+            .filter(h => h.categoria.toLowerCase().includes(filtro))
+            .forEach(h => {
+              // Lista
+              const li = document.createElement('li');
+              li.className = 'list-group-item';
+              li.innerHTML = `<strong>${h.titulo}</strong> - ${h.desc}<br><small>Fecha: ${h.fecha} | Categoría: ${h.categoria} | Fuente: ${h.fuente}</small>`;
+              hechosList.appendChild(li);
+    
+              // Mapa
+              const marker = L.marker(h.coords).addTo(map)
+                .bindPopup(`<b>${h.titulo}</b><br>${h.desc}<br><small>Fecha: ${h.fecha}<br>Categoría: ${h.categoria}<br>Fuente: ${h.fuente}</small>`);
+              markers.push(marker);
+            });
+        }
+    
+        document.getElementById('coleccionSelect').addEventListener('change', e => renderColeccion(e.target.value));
+        document.getElementById('filtroCategoria').addEventListener('input', () => renderColeccion(document.getElementById('coleccionSelect').value));
+    
+        // Render inicial
+        renderColeccion(document.getElementById('coleccionSelect').value);
+    </script>
+    <footer class="mm-footer">
+        <div>© 2025 MetaMapa - Todos los derechos reservados</div>
+        <div><a href="https://www.argentina.gob.ar/">Información legal y privacidad</a></div>
+    </footer>
+    <script src="assets/app.js"></script>
+</body>
+
+</html>

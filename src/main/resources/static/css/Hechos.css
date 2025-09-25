@@ -1,0 +1,6 @@
+.descripcion {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
+}

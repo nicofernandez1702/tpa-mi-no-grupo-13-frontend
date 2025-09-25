@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Subir Hecho · MetaMapa</title>
+    <link href="../css/Generales.css" rel="stylesheet" />
+    <script src="assets/app.js"></script>
+    <link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" rel="stylesheet" />
+</head>
+
+<body>
+    <header class="mm-header">
+        <div class="mm-header-top"><a class="mm-brand" href="landing.html">MetaMapa</a>
+            <nav class="mm-nav"><span class="mm-page">Subir Hecho</span><a class="mm-link" href="menu_Colecciones.html">Colecciones</a><a class="mm-link" href="login.html" id="nav-login">Login</a><a class="mm-link" href="register.html" id="nav-register">Registrarte</a>
+                <div
+                class="mm-profile" hidden="" id="nav-profile">
+                    <button class="mm-btn">Mi Perfil</button>
+                    <div class="mm-dropdown"><a class="mm-dd-item" href="mi_perfil.html">Ir a mi perfil</a><a class="mm-dd-item" href="panel_control.html" id="dd-panel">Ir a Panel de control</a></div>
+        </div>
+        </nav>
+        </div>
+    </header>
+    <main class="container">
+        <h1>Subir hecho</h1>
+        <form class="form grid">
+            <div>
+              <label>Título<span class="req">*</span></label>
+              <input name="título" required="True" type="text" />
+            </div>
+            <div>
+              <label>Descripción<span class="req">*</span></label>
+              <textarea name="descripcion" required="True"></textarea>
+            </div>
+            <div>
+              <label>Categoría</label>
+              <input name="categoría" required="False" type="text" />
+            </div>
+            <div>
+              <label>Ubicación<span class="req">*</span></label>
+              <input name="ubicación" required="True" type="text" />
+            </div>
+            <div>
+              <label>Fecha<span class="req">*</span></label>
+              <input name="fecha" required="True" type="date" />
+            </div>
+            <div>
+              <label>Multimedia</label>
+              <input class="input" type="file" name="multimedia">
+            </div>
+            <button class="mm-btn primary" type="submit">Enviar hecho</button>
+            
+        </form>
+    </main>
+    <script>
+        const todas = [
+          {id:'medioambiente', titulo:'Medioambiente'},
+          {id:'urbanos', titulo:'Reportes Urbanos'},
+          {id:'historia', titulo:'Historia'}
+        ];
+        document.getElementById('buscar-colecciones').addEventListener('click', ()=>{
+          const q = document.getElementById('coleccion-q').value.toLowerCase();
+          const cont = document.getElementById('colecciones-result'); cont.innerHTML='';
+          todas.filter(c=>c.titulo.toLowerCase().includes(q) || c.id.includes(q)).forEach(c=>{
+            const card = document.createElement('article'); card.className='card';
+            const h3 = document.createElement('h3'); h3.textContent = c.titulo; card.appendChild(h3);
+            const pick = document.createElement('button'); pick.className='mm-btn'; pick.textContent='Seleccionar';
+            pick.onclick=()=>{ document.getElementById('coleccion-q').value = c.titulo + ' ('+c.id+')'; };
+            card.appendChild(pick);
+            cont.appendChild(card);
+          });
+        });
+    </script>
+    <footer class="footer">
+        <div>© 2025 MetaMapa - Todos los derechos reservados</div>
+        <div><a href="https://www.argentina.gob.ar/">Información legal y privacidad</a></div>
+    </footer>
+    <script src="assets/app.js"></script>
+    <script crossorigin="" integrity="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+
+</html>

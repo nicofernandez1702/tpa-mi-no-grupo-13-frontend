@@ -1,0 +1,17 @@
+.descripcion {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
+
+.container {
+  width: 80%;
+  margin:20px auto;
+  padding:16px
+
+}
+
+.card {
+  padding: 20px;
+}
