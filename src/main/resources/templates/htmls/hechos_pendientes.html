@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <main class="container my-5">
+      <section class="text-center mb-5">
+        <h1 class="display-4">Hechos Pendientes</h1>
+        <p class="text-muted">Revisa los hechos subidos por los contribuyentes y decide su estado.</p>
+      </section>
+
+      <section class="row justify-content-center">
+        <div class="col-md-10">
+          <ul class="list-group" id="listaHechos"></ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal de detalles -->
+    <div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="modalTitulo">Detalles del Hecho</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Categoría:</strong> <span id="modalCategoria"></span></p>
+            <p><strong>Ubicación:</strong> <span id="modalUbicacion"></span></p>
+            <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
+            <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
+            <p><strong>Fuente:</strong> <span id="modalFuente"></span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de acción (aprobar, modificar, rechazar) -->
+    <div class="modal fade" id="modalAccion" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header" id="modalAccionHeader">
+            <h5 class="modal-title" id="modalAccionTitulo"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="modalAccionBody"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="modalAccionConfirmar">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/datos_prueba.js"></script>
+    <script src="assets/js/navbar_admin.js"></script>
+    <script src="assets/js/footer.js"></script>
+    <script src="assets/js/hechos_pendientes.js"></script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaMapa</title>
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+ <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <main class="container my-5">
+    <!-- Hero de la página -->
+    <section class="text-center mb-5">
+      <h1 class="display-4">Colecciones</h1>
+    </section>
+
+     <!-- Barra de búsqueda y orden -->
+  <section class="row mb-4 g-2 align-items-center">
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Buscar colecciones por título..." id="busqueda-colecciones">
+    </div>
+    <div class="col-md-6 text-md-end">
+      <div class="btn-group" role="group" aria-label="Opciones de orden">
+        <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="alfabetico">
+          <i class="bi bi-arrow-up me-2"></i>
+          Alfabéticamente
+        </button>
+        <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="cantidad">
+          <i class="bi bi-arrow-up me-2"></i>
+          Cantidad de Hechos
+        </button>
+        <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="fecha">
+          <i class="bi bi-arrow-up me-2"></i>
+          Fecha
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Grid de colecciones -->
+  <section class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4" id="grid-colecciones">
+    <!-- Card de colección -->
+    
+
+    <!-- Más cards según necesites -->
+  </section>
+
+  </main>
+
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Bootstrap JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/datos_prueba.js"></script>
+  <script src="assets/js/navbar_unloged.js"></script>
+  <script src="assets/js/footer.js"></script>
+  <script src="assets/js/colecciones.js"></script>
+</body>
+</html>

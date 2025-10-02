@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="navbar"></div>
+      <main class="container my-5">
+        <!-- Hero de la página -->
+        <section class="text-center mb-5">
+          <h1 class="display-4">Colecciones</h1>
+          <p class="text-muted">Administra las colecciones: puedes crearlas, editarlas o eliminarlas.</p>
+          <a href="coleccion_nueva.html" class="btn btn-success">
+            <i class="bi bi-plus-lg me-2"></i>Agregar Colección
+          </a>
+        </section>
+        
+        <!-- Barra de búsqueda y orden -->
+        <section class="row mb-4 g-2 align-items-center">
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Buscar colecciones por título..." id="busqueda-colecciones">
+          </div>
+          <div class="col-md-6 text-md-end">
+            <div class="btn-group" role="group" aria-label="Opciones de orden">
+              <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="alfabetico">
+                <i class="bi bi-arrow-up me-2"></i>
+                Alfabéticamente
+              </button>
+              <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="cantidad">
+                <i class="bi bi-arrow-up me-2"></i>
+                Cantidad de Hechos
+              </button>
+              <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="fecha">
+                <i class="bi bi-arrow-up me-2"></i>
+                Fecha
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Grid de colecciones -->
+        <section class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4" id="grid-colecciones">
+          <!-- Ejemplo de card de colección -->
+          <div class="col">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Colección Ejemplo</h5>
+                <p class="card-text text-muted">Descripción breve de la colección.</p>
+                <p class="mb-1"><strong>Cantidad de hechos:</strong> 120</p>
+                <p class="mb-3"><strong>Última actualización:</strong> 12/09/2025</p>
+                <div class="mt-auto d-flex justify-content-between">
+                  <a href="coleccion_editar.html?id=1" class="btn btn-sm btn-primary">
+                    <i class="bi bi-pencil-square me-1"></i>Editar
+                  </a>
+                  <button class="btn btn-sm btn-danger">
+                    <i class="bi bi-trash me-1"></i>Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Más cards se insertan dinámicamente -->
+        </section>
+
+          <!-- Modal de eliminación -->
+        <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Eliminar Colección</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <p>¿Seguro que quieres eliminar la colección <strong id="modalEliminarTitulo"></strong>? Esta acción no se puede deshacer.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/datos_prueba.js"></script>
+    <script src="assets/js/navbar_admin.js"></script>
+    <script src="assets/js/footer.js"></script>
+    <script src="assets/js/colecciones_admin.js"></script>
+  </body>
+</html>

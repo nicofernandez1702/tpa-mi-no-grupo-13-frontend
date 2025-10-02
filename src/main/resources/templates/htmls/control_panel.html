@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Control - Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <main class="container my-5">
+    <!-- Título -->
+    <section class="mb-4 text-center">
+      <h1 class="display-5">Panel de Control</h1>
+      <p class="text-muted">Resumen de actividad y accesos de administración.</p>
+    </section>
+
+    <!-- Métricas rápidas -->
+    <section class="row text-center mb-5">
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <i class="bi bi-flag-fill text-primary fs-1"></i>
+            <h3 class="mt-2">120</h3>
+            <p class="text-muted">Hechos registrados</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <i class="bi bi-journal-richtext text-success fs-1"></i>
+            <h3 class="mt-2">15</h3>
+            <p class="text-muted">Fuentes activas</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <i class="bi bi-exclamation-triangle-fill text-warning fs-1"></i>
+            <h3 class="mt-2">8</h3>
+            <p class="text-muted">Solicitudes de eliminación</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <i class="bi bi-people-fill text-info fs-1"></i>
+            <h3 class="mt-2">32</h3>
+            <p class="text-muted">Contribuyentes activos</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actividad reciente -->
+    <section class="mb-5">
+      <h4 class="mb-3">Actividad reciente</h4>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge bg-primary">Hecho</span></td>
+              <td>Nuevo hecho creado en la colección "Inundaciones".</td>
+              <td>15/09/2025</td>
+              <td><a href="hecho_detalle.html?id=1" class="btn btn-sm btn-outline-primary">Ver</a></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-warning">Solicitud</span></td>
+              <td>Solicitud de eliminación de hecho #45.</td>
+              <td>14/09/2025</td>
+              <td><a href="solicitudes.html" class="btn btn-sm btn-outline-warning">Revisar</a></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-success">Fuente</span></td>
+              <td>Nueva fuente dinámica configurada en "Clima".</td>
+              <td>12/09/2025</td>
+              <td><a href="fuentes.html" class="btn btn-sm btn-outline-success">Ver</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Accesos rápidos -->
+    <section>
+      <h4 class="mb-3">Accesos rápidos</h4>
+      <div class="d-flex flex-wrap gap-3">
+        <a href="colecciones.html" class="btn btn-outline-dark">
+          <i class="bi bi-collection me-2"></i> Gestionar colecciones
+        </a>
+        <a href="fuentes.html" class="btn btn-outline-dark">
+          <i class="bi bi-journal-richtext me-2"></i> Configurar fuentes
+        </a>
+        <a href="consenso.html" class="btn btn-outline-dark">
+          <i class="bi bi-diagram-3 me-2"></i> Configurar algoritmos
+        </a>
+        <a href="hechos_revision.html" class="btn btn-outline-dark">
+          <i class="bi bi-check2-circle me-2"></i> Revisar hechos
+        </a>
+        <a href="solicitudes.html" class="btn btn-outline-dark">
+          <i class="bi bi-exclamation-triangle me-2"></i> Revisar solicitudes
+        </a>
+        <a href="importar.html" class="btn btn-outline-dark">
+          <i class="bi bi-file-earmark-spreadsheet me-2"></i> Importar hechos (CSV)
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/navbar_admin.js"></script>
+  <script src="assets/js/footer.js"></script>
+</body>
+</html>
