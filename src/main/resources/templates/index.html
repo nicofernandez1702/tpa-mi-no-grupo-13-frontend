@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
+<html th:replace="~{layout/base :: html}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,17 +14,18 @@
 
   <main>
     <!-- Hero Section -->
-    <section class="hero-section text-center text-white d-flex align-items-center" style="
-        background-image: url('assets/img/map_background.jpg');
+    <section class="hero-section text-center text-white d-flex align-items-center" th:style="'
+    background-image: url('+ @{/img/map_background.jpg} + ');
         background-size: cover;
         background-position: center;
         height: 70vh;
-        position: relative;">
-    
+        position: relative;
+    '">
+
     <div class="container position-relative" style="z-index: 2;">
         <h1 class="display-4 fw-bold">MetaMapa</h1>
         <p class="lead">Conecta, visualiza y explora hechos de manera interactiva.</p>
-        <a href="hechos/hechos.html" class="btn btn-primary btn-lg mt-3">Explorar Hechos</a>
+        <a th:href="@{/hechos}" class="btn btn-primary btn-lg mt-3">Explorar Hechos</a>
     </div>
 
     <!-- Overlay oscuro para mejorar contraste -->
