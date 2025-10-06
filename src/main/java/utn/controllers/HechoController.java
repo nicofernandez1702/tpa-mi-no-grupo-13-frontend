@@ -15,4 +15,11 @@ public class HechoController {
 
         return "hechos/hechos";
     }
+
+    @GetMapping("/agregarHecho")
+    public String agregarHecho(Model model){
+        model.addAttribute("titulo", "Agregar Hecho");
+
+        return "hechos/nuevo_hecho";
+    }
 }
