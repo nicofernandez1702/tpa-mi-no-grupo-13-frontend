@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,7 @@
                     <a class="nav-link" th:href="@{/colecciones}">Colecciones</a>
                 </li>
                 <li class="nav-item my-2 w-100 w-md-auto">
-                    <a class="nav-link" th:href="@{hechos}">Hechos</a>
+                    <a class="nav-link" th:href="@{/hechos}">Hechos</a>
                 </li>
                 <!-- Mis Hechos se agregará dinámicamente si está logeado ESTO AHORA NO ANDA, HAY QUE ADAPTARLO A THYMELEAF -->
                 <li class="nav-item my-2 w-100 text-center" id="auth-buttons">
@@ -37,13 +37,13 @@
 </nav>
 
 <!-- Contenido principal -->
-<main class="container my-4 flex-grow-1">
+<main class="flex-grow-1">
     <div th:replace="${contenido} :: contenido"></div>
 </main>
 
 <!-- Fragmento de footer TODO AGREGAR LA HREF LEGAL-->
 <footer th:fragment="footer" id="legal" class="bg-primary text-white text-center py-3 mt-5">
-    <p>&copy; 2025 MetaMapa | <a th:href="@{legal}" class="text-white text-decoration-underline">Privacidad y Legal</a></p>
+    <p>&copy; 2025 MetaMapa | <a th:href="@{/legal}" class="text-white text-decoration-underline">Privacidad y Legal</a></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
