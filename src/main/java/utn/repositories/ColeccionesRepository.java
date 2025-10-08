@@ -1,4 +1,4 @@
-package utn.models.repositories;
+package utn.repositories;
 
 import org.springframework.stereotype.Repository;
 
