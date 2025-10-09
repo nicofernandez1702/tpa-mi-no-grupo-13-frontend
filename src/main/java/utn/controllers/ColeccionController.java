@@ -5,10 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import utn.services.ColeccionService;
 
 @Controller
 @RequestMapping("/colecciones")
 public class ColeccionController {
+    private ColeccionService coleccionService;
 
     @GetMapping
     public String listarColecciones(Model model) {
