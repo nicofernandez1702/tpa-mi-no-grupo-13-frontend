@@ -20,7 +20,7 @@ public class HechoService {
     public Optional<HechoDTO> obtenerHechoPorId(Long idHecho){
         HechoDTO hecho = intentarRecuperarHecho(idHecho);
 
-        return Optional.of(hecho)
+        return Optional.of(hecho);
     }
 
     public HechoDTO intentarRecuperarHecho(Long idHecho){
