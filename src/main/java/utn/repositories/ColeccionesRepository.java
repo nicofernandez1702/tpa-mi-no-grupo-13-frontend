@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ColeccionesRepository {
@@ -61,5 +62,9 @@ public class ColeccionesRepository {
 
     public List<ColeccionDTO> findAll(){
         return this.colecciones;
+    }
+
+    public Optional<ColeccionDTO> findById(String id){
+        return colecciones.stream().filter(coleccion -> coleccion.getId().equals(id)).findFirst();
     }
 }
