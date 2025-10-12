@@ -42,6 +42,7 @@ public class HechoController {
             HechoDTO hecho = hechoService.obtenerHechoPorId(id).get();
             model.addAttribute("hecho", hecho);
             model.addAttribute("titulo", hecho.getTitulo());
+            model.addAttribute("ubicacion", "HACER FUNCION hecho.getUbicacion()");
 
             return "hechos/hecho_detalle";
         }
