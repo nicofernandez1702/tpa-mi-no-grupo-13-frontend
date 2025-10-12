@@ -1,15 +1,3 @@
- // --- Obtener id de la URL ---
-  const params = new URLSearchParams(window.location.search);
-  const hechoId = parseInt(params.get("id"));
-
-  // --- Buscar hecho en colecciones ---
-  let hecho = null;
-  colecciones.forEach(c => {
-    c.hechos.forEach(h => {
-      if (h.id === hechoId) hecho = h;
-    });
-  });
-
   if (!hecho) {
     alert("Hecho no encontrado");
   } else {
@@ -17,19 +5,19 @@
     document.getElementById("titulo").value = hecho.titulo;
     document.getElementById("descripcion").value = hecho.descripcion;
     document.getElementById("categoria").value = hecho.categoria;
-    document.getElementById("ubicacionTexto").value = hecho.lugar;
+    document.getElementById("ubicacionTexto").value = ubicacion;
     document.getElementById("fuente").value = hecho.fuente;
-    document.getElementById("lat").value = hecho.lat;
-    document.getElementById("lng").value = hecho.lng;
-    document.getElementById("preview").src = hecho.imagen;
+    document.getElementById("lat").value = hecho.latitud;
+    document.getElementById("lng").value = hecho.longitud;
+//  document.getElementById("preview").src = hecho.imagen; TODO Agregar el path de la imagen al HechoDTO
 
     // --- Inicializar mapa ---
-    const map = L.map('mapa-editar').setView([hecho.lat, hecho.lng], 13);
+    const map = L.map('mapa-editar').setView([hecho.latitud, hecho.longitud], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    let marker = L.marker([hecho.lat, hecho.lng], { draggable: true }).addTo(map);
+    let marker = L.marker([hecho.latitud, hecho.longitud], { draggable: true }).addTo(map);
 
     function updateCoords(lat, lng) {
       document.getElementById('lat').value = lat;

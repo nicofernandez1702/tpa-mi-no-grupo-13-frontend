@@ -50,4 +50,19 @@ public class HechoController {
             return "redirect:/error";
         }
     }
+
+    @GetMapping("/{id}/editar")
+    public String editarHecho(Model model, @PathVariable String id){
+        try {
+            HechoDTO hecho = hechoService.obtenerHechoPorId(id).get();
+            model.addAttribute("hecho", hecho);
+            model.addAttribute("titulo", hecho.getTitulo() + " - Editar");
+            model.addAttribute("ubicacion", "HACER FUNCION hecho.getUbicacion()");
+
+            return "hechos/hecho_editar";
+        }
+        catch (NotFoundException e) {
+            return "redirect:/error";
+        }
+    }
 }
