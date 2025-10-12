@@ -13,17 +13,21 @@ public class HechoService {
 
     private HechosRepository hechosRepository;
 
+    public HechoService(HechosRepository hechosRepository) {
+        this.hechosRepository = hechosRepository;
+    }
+
     public List<HechoDTO> obtenerTodosLosHechos(){
         return hechosRepository.findAll();
     }
 
-    public Optional<HechoDTO> obtenerHechoPorId(Long idHecho){
+    public Optional<HechoDTO> obtenerHechoPorId(String idHecho){
         HechoDTO hecho = intentarRecuperarHecho(idHecho);
 
         return Optional.of(hecho);
     }
 
-    public HechoDTO intentarRecuperarHecho(Long idHecho){
+    public HechoDTO intentarRecuperarHecho(String idHecho){
         Optional<HechoDTO> hecho = hechosRepository.findById(idHecho);
         if(hecho.isEmpty()){
             throw new NotFoundException("Hecho");
