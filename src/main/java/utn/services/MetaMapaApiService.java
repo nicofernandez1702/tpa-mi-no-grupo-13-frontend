@@ -21,17 +21,17 @@ public class MetaMapaApiService {
     private final WebClient webClient;
     private final WebApiCallerService webApiCallerService;
     private final String authServiceUrl;
-    private final String alumnosServiceUrl;
+    private final String metamapaServiceUrl;
 
     @Autowired
     public MetaMapaApiService(
             WebApiCallerService webApiCallerService,
             @Value("${auth.service.url}") String authServiceUrl,
-            @Value("${alumnos.service.url}") String alumnosServiceUrl) {
+            @Value("${metamapa.service.url}") String metamapaServiceUrl) {
         this.webClient = WebClient.builder().build();
         this.webApiCallerService = webApiCallerService;
         this.authServiceUrl = authServiceUrl;
-        this.alumnosServiceUrl = alumnosServiceUrl;
+        this.metamapaServiceUrl = metamapaServiceUrl;
     }
 
     public AuthResponseDTO login(String username, String password) {
