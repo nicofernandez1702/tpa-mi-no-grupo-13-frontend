@@ -1,5 +1,6 @@
 package utn.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.HechoDTO;
 import utn.services.HechoService;
+import utn.services.MetaMapaApiService;
 
 import java.util.List;
 
@@ -15,16 +17,29 @@ import java.util.List;
 @RequestMapping("/hechos")
 public class HechoController {
     private HechoService hechoService;
+    private MetaMapaApiService metaMapaApiService;
 
-    public HechoController(HechoService hechoService) {
+    public HechoController(MetaMapaApiService metaMapaApiService,  HechoService hechoService) {
+        this.metaMapaApiService = metaMapaApiService;
         this.hechoService = hechoService;
     }
 
     @GetMapping
-    public String listarHechos(Model model) {
-        List<HechoDTO> hechos = hechoService.obtenerTodosLosHechos();
+    public String listarHechos(Model model, HttpSession session) {
         model.addAttribute("titulo", "Hechos");
-        model.addAttribute("hechos", hechos);
+
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
+        try {
+            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos(accessToken);
+
+            model.addAttribute("hechos", hechos);
+        }
+        catch (Exception e) {
+            model.addAttribute("No se pudieron cargar los hechos: ", e.getMessage());
+        }
 
         return "hechos/hechos";
     }
