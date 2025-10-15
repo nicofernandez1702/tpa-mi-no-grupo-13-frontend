@@ -48,7 +48,11 @@
                         <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="perfil.html">Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="logout-btn">Logout</a></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item" type="submit" id="logout-btn">Logout</button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </li>
