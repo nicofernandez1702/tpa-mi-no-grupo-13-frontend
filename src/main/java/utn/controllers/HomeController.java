@@ -22,9 +22,10 @@ public class HomeController {
 
         // Obtener el accessToken de la sesión
         String accessToken = (String) session.getAttribute("accessToken");
-        if (accessToken == null) {
-            // Si no hay token, redirigir al login
-            return "redirect:/login";
+        if (accessToken != null) {
+            // Agrego datos de usuario
+
+            model.addAttribute("usuario", session.getAttribute("username"));
         }
 
         try {
@@ -38,9 +39,6 @@ public class HomeController {
             model.addAttribute("hechosDestacados", hechosDestacados);
             model.addAttribute("totalHechos", hechos.size());
 
-            // Agrego datos de usuario
-
-            model.addAttribute("usuario", session.getAttribute("username"));
 
         } catch (Exception e) {
             model.addAttribute("error", "No se pudieron cargar los hechos: " + e.getMessage());

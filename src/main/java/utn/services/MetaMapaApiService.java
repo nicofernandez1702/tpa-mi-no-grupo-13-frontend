@@ -70,15 +70,28 @@ public class MetaMapaApiService {
      */
     public List<HechoDTO> obtenerTodosLosHechos(String accessToken) {
         try {
-            return webClient
-                    .get()
-                    .uri(metamapaServiceUrl + "/admin/hechos")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+            WebClient.RequestHeadersSpec<?> request;
+
+            if (accessToken != null && !accessToken.isBlank()) {
+                // Usuario logueado → usa endpoint protegido
+                request = webClient
+                        .get()
+                        .uri(metamapaServiceUrl + "/admin/hechos")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+            } else {
+                // Visitante → usa endpoint público
+                request = webClient
+                        .get()
+                        .uri(metamapaServiceUrl + "/hechos");
+            }
+
+            return request
                     .retrieve()
                     .bodyToFlux(HechoDTO.class)
                     .collectList()
                     .blockOptional()
                     .orElse(Collections.emptyList());
+
         } catch (WebClientResponseException e) {
             log.error("Error HTTP al obtener hechos: {}", e.getMessage());
             throw new RuntimeException("Error al obtener hechos del backend remoto", e);
@@ -87,6 +100,7 @@ public class MetaMapaApiService {
             throw new RuntimeException("Error de conexión con el backend remoto", e);
         }
     }
+
 
     /**
      * Obtiene roles y permisos del usuario autenticado.
