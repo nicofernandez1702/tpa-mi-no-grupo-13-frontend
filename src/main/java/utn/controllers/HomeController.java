@@ -38,6 +38,10 @@ public class HomeController {
             model.addAttribute("hechosDestacados", hechosDestacados);
             model.addAttribute("totalHechos", hechos.size());
 
+            // Agrego datos de usuario
+
+            model.addAttribute("usuario", "Username");
+
         } catch (Exception e) {
             model.addAttribute("error", "No se pudieron cargar los hechos: " + e.getMessage());
         }
