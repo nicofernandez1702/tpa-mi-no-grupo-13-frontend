@@ -25,7 +25,8 @@ import java.util.List;
 
 @Component
 public class CustomAuthProvider implements AuthenticationProvider {
-    private static final Logger log = (Logger) LoggerFactory.getLogger(CustomAuthProvider.class);
+
+    private static final Logger log = LoggerFactory.getLogger(CustomAuthProvider.class);
     private final MetaMapaApiService externalAuthService;
 
     public CustomAuthProvider(MetaMapaApiService externalAuthService) {
@@ -37,15 +38,22 @@ public class CustomAuthProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
+        log.info("Intentando autenticar usuario '{}'", username);
+
         try {
-            // Llamada a servicio externo para obtener tokens
+            // 🔹 1. Llamada al servicio externo
             AuthResponseDTO authResponse = externalAuthService.login(username, password);
 
             if (authResponse == null) {
+                log.warn("El servicio de autenticación devolvió null para el usuario '{}'", username);
                 throw new BadCredentialsException("Usuario o contraseña inválidos");
             }
 
-            log.info("Usuario logeado! Configurando variables de sesión");
+            log.info("Login exitoso en servicio externo para '{}'", username);
+            log.debug("Access Token recibido: {}", authResponse.getAccessToken());
+            log.debug("Refresh Token recibido: {}", authResponse.getRefreshToken());
+
+            // 🔹 2. Guardar en sesión
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
 
@@ -53,23 +61,39 @@ public class CustomAuthProvider implements AuthenticationProvider {
             request.getSession().setAttribute("refreshToken", authResponse.getRefreshToken());
             request.getSession().setAttribute("username", username);
 
-            log.info("Buscando roles y permisos del usuario");
+            // 🔹 3. Obtener roles y permisos
+            log.info("Buscando roles y permisos para '{}'", username);
             RolesPermisosDTO rolesPermisos = externalAuthService.getRolesPermisos(authResponse.getAccessToken());
 
-            log.info("Cargando roles y permisos del usuario en sesión");
+            if (rolesPermisos == null) {
+                log.warn("No se obtuvieron roles ni permisos para '{}'", username);
+            } else {
+                log.info("Rol asignado: {}", rolesPermisos.getRol());
+                log.info("Permisos: {}", rolesPermisos.getPermisos());
+            }
+
+            // 🔹 4. Cargar en sesión
             request.getSession().setAttribute("rol", rolesPermisos.getRol());
             request.getSession().setAttribute("permisos", rolesPermisos.getPermisos());
 
             List<GrantedAuthority> authorities = new ArrayList<>();
-            rolesPermisos.getPermisos().forEach(permiso -> {
-                authorities.add(new SimpleGrantedAuthority(permiso.name()));
-            });
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + rolesPermisos.getRol().name()));
+            if (rolesPermisos != null && rolesPermisos.getPermisos() != null) {
+                rolesPermisos.getPermisos().forEach(permiso ->
+                        authorities.add(new SimpleGrantedAuthority(permiso.name())));
+            }
+            if (rolesPermisos != null && rolesPermisos.getRol() != null) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + rolesPermisos.getRol().name()));
+            }
 
+            log.info("Autenticación completa para '{}'", username);
             return new UsernamePasswordAuthenticationToken(username, password, authorities);
 
+        } catch (BadCredentialsException e) {
+            log.warn("Credenciales inválidas para '{}': {}", username, e.getMessage());
+            throw e;
         } catch (RuntimeException e) {
-            throw new BadCredentialsException("Error en el sistema de autenticación: " + e.getMessage());
+            log.error("Error inesperado al autenticar '{}': {}", username, e.getMessage());
+            throw new BadCredentialsException("Error en el sistema de autenticación: " + e.getMessage(), e);
         }
     }
 
