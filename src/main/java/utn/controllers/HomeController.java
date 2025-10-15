@@ -40,7 +40,7 @@ public class HomeController {
 
             // Agrego datos de usuario
 
-            model.addAttribute("usuario", "Username");
+            model.addAttribute("usuario", session.getAttribute("username"));
 
         } catch (Exception e) {
             model.addAttribute("error", "No se pudieron cargar los hechos: " + e.getMessage());
