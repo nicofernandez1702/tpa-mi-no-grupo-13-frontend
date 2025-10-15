@@ -17,6 +17,10 @@ import java.util.List;
 public class ColeccionController {
     private ColeccionService coleccionService;
 
+    public ColeccionController(ColeccionService coleccionService) {
+        this.coleccionService = coleccionService;
+    }
+
     @GetMapping
     public String listarColecciones(Model model) {
         model.addAttribute("titulo", "Colecciones");

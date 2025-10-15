@@ -12,6 +12,10 @@ import java.util.Optional;
 public class ColeccionService {
     private ColeccionesRepository coleccionesRepository;
 
+    public ColeccionService(ColeccionesRepository coleccionesRepository) {
+        this.coleccionesRepository = coleccionesRepository;
+    }
+
     public List<ColeccionDTO> obtenerTodasLasColecciones() {
         return coleccionesRepository.findAll();
     }
