@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")    // tu template de login
                         .permitAll()
-                        .defaultSuccessUrl("/alumnos", true) // redirigir tras login exitoso
+                        .defaultSuccessUrl("/", true) // redirigir tras login exitoso
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
