@@ -40,12 +40,15 @@ public class ColeccionController {
     }
 
     @GetMapping("/{id}")
-    public String coleccionPorId(Model model, @PathVariable String id) {
+    public String coleccionPorId(Model model, @PathVariable Long id,HttpSession session) {
 
         model.addAttribute("titulo", "Titulo de la coleccion");
 
         try {
-            ColeccionDTO coleccion = coleccionService.obtenerColeccionPorId(id).get();
+
+            String accessToken = (String) session.getAttribute("accessToken");
+
+            ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(accessToken,id);
 
             model.addAttribute("hechos", coleccion.getHechos());
             model.addAttribute("titulo", coleccion.getTitulo());
