@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
 import utn.services.MetaMapaApiService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,6 +33,8 @@ public class HomeController {
         try {
             // Llamar al servicio pasando el token
             List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos(accessToken);
+            List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones(accessToken);
+            List<ColeccionDTO> coleccionesDestacadas = colecciones.stream().limit(3).toList();
 
             // Seleccionar los primeros 3 hechos como destacados
             List<HechoDTO> hechosDestacados = hechos.stream().limit(3).toList();
@@ -38,7 +42,7 @@ public class HomeController {
             // Pasar los datos a la vista
             model.addAttribute("hechosDestacados", hechosDestacados);
             model.addAttribute("totalHechos", hechos.size());
-
+            model.addAttribute("coleccionesDestacadas", coleccionesDestacadas);
 
         } catch (Exception e) {
             model.addAttribute("error", "No se pudieron cargar los hechos: " + e.getMessage());

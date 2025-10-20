@@ -16,12 +16,25 @@
         <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); z-index: 1;"></div>
     </section>
 
-    <!-- Colecciones Destacadas (JS) -->
+    <!-- Colecciones Destacadas -->
     <section id="colecciones-destacadas" class="py-5">
         <div class="container">
             <h2 class="mb-4 text-center">Colecciones Destacadas</h2>
-            <div class="row g-4 text-center" id="grid-colecciones-destacadas">
-                <!-- Cards se insertarán dinámicamente con JS -->
+            <div class="row g-4 text-center">
+
+                <div class="col-md-4" th:each="coleccion : ${coleccionesDestacadas}">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${coleccion.titulo}">Título de la colección</h5>
+                            <p class="card-text" th:text="${coleccion.descripcion}">Descripción breve de la colección</p>
+                            <a th:href="@{/colecciones/{id}(id=${coleccion.id})}"
+                               class="btn btn-outline-primary w-100">
+                                Ver colección
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
