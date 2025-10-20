@@ -56,6 +56,18 @@ public class HomeController {
     public String notFound() {
         return "error";
     }
+
+    @GetMapping("/perfil")
+    public String perfil(Model model, HttpSession session) {
+        model.addAttribute("titulo", "Perfil");
+
+        String username = (String) session.getAttribute("username");
+        if (username != null) {
+            model.addAttribute("usuario", username);
+        }
+
+        return "perfil";
+    }
 }
 
 
