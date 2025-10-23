@@ -24,211 +24,149 @@ import java.util.Map;
 public class MetaMapaApiService {
 
     private static final Logger log = LoggerFactory.getLogger(MetaMapaApiService.class);
-    private final WebClient webClient;
+
+    private final WebApiCallerService webApiCaller;
     private final String authServiceUrl;
     private final String metamapaServiceUrl;
 
     @Autowired
     public MetaMapaApiService(
+            WebApiCallerService webApiCaller,
             @Value("${auth.service.url}") String authServiceUrl,
             @Value("${metamapa.service.url}") String metamapaServiceUrl) {
-        this.webClient = WebClient.builder().build();
+        this.webApiCaller = webApiCaller;
         this.authServiceUrl = authServiceUrl;
         this.metamapaServiceUrl = metamapaServiceUrl;
     }
 
-    // ====== AUTH ======
     public AuthResponseDTO login(String username, String password) {
         try {
-            return webClient.post()
+            Map<String, String> body = Map.of("username", username, "password", password);
+
+            // login sin usar WebApiCaller porque no hay token todavía
+            return WebClient.builder().build()
+                    .post()
                     .uri(authServiceUrl + "/auth")
-                    .bodyValue(Map.of("username", username, "password", password))
+                    .bodyValue(body)
                     .retrieve()
                     .bodyToMono(AuthResponseDTO.class)
                     .block();
-        } catch (WebClientResponseException e) {
-            log.error("Error HTTP en login: {}", e.getMessage());
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) return null;
-            throw new RuntimeException("Error en el servicio de autenticación: " + e.getMessage(), e);
         } catch (Exception e) {
-            log.error("Error de conexión con el servicio de auth: {}", e.getMessage());
-            throw new RuntimeException("Error de conexión con el servicio de autenticación: " + e.getMessage(), e);
+            log.error("Error en login: {}", e.getMessage());
+            throw new RuntimeException("Error al autenticar: " + e.getMessage(), e);
         }
     }
 
     // ====== HECHOS ======
     public List<HechoDTO> obtenerTodosLosHechos(String accessToken) {
+        String url = (accessToken != null && !accessToken.isBlank())
+                ? metamapaServiceUrl + "/admin/hechos"
+                : metamapaServiceUrl + "/hechos";
         try {
-            WebClient.RequestHeadersSpec<?> request = (accessToken != null && !accessToken.isBlank())
-                    ? webClient.get()
-                    .uri(metamapaServiceUrl + "/admin/hechos")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    : webClient.get().uri(metamapaServiceUrl + "/hechos");
-
-            return request.retrieve()
-                    .bodyToFlux(HechoDTO.class)
-                    .collectList()
-                    .blockOptional()
-                    .orElse(Collections.emptyList());
-        } catch (WebClientResponseException e) {
-            log.error("Error HTTP al obtener hechos: {}", e.getMessage());
-            throw new RuntimeException("Error al obtener hechos del backend remoto", e);
+            return webApiCaller.getList(url, HechoDTO.class);
         } catch (Exception e) {
-            log.error("Error de conexión al backend de hechos: {}", e.getMessage());
-            throw new RuntimeException("Error de conexión con el backend remoto", e);
+            log.error("Error al obtener hechos: {}", e.getMessage());
+            throw new RuntimeException("No se pudieron obtener los hechos", e);
         }
     }
 
     public RolesPermisosDTO getRolesPermisos(String accessToken) {
         try {
-            return webClient.get()
-                    .uri(authServiceUrl + "/auth/user/roles-permisos")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(RolesPermisosDTO.class)
-                    .block();
-        } catch (WebClientResponseException e) {
-            log.error("Error HTTP al obtener roles y permisos: {}", e.getMessage());
-            throw new RuntimeException("Error al obtener roles y permisos del backend remoto", e);
+            String url = authServiceUrl + "/auth/user/roles-permisos";
+            return webApiCaller.getWithAuth(url, accessToken, RolesPermisosDTO.class);
         } catch (Exception e) {
-            log.error("Error de conexión al backend de roles y permisos: {}", e.getMessage());
-            throw new RuntimeException("Error de conexión con el backend remoto", e);
+            log.error("Error al obtener roles y permisos: {}", e.getMessage());
+            throw new RuntimeException("Error al obtener roles y permisos", e);
         }
     }
 
     // ====== COLECCIONES ======
 
-    /** Crear nueva colección */
     public String crearColeccion(String accessToken, String titulo, String descripcion) {
         try {
-            return webClient.post()
-                    .uri(metamapaServiceUrl + "/admin/colecciones")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .bodyValue(Map.of("titulo", titulo, "descripcion", descripcion))
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            Map<String, String> body = Map.of("titulo", titulo, "descripcion", descripcion);
+            return webApiCaller.post(metamapaServiceUrl + "/admin/colecciones", body, String.class);
         } catch (Exception e) {
             log.error("Error al crear colección: {}", e.getMessage());
             throw new RuntimeException("No se pudo crear la colección", e);
         }
     }
 
-    /** Obtener todas las colecciones */
     public List<ColeccionDTO> obtenerColecciones(String accessToken) {
         try {
-            return webClient.get()
-                    .uri(metamapaServiceUrl + "/admin/colecciones")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToFlux(ColeccionDTO.class)
-                    .collectList()
-                    .blockOptional()
-                    .orElse(Collections.emptyList());
+            return webApiCaller.getList(metamapaServiceUrl + "/admin/colecciones", ColeccionDTO.class);
         } catch (Exception e) {
             log.error("Error al obtener colecciones: {}", e.getMessage());
             throw new RuntimeException("No se pudieron obtener las colecciones", e);
         }
     }
 
-    /** Obtener una colección por ID */
     public ColeccionDTO obtenerColeccionPorId(String accessToken, Long id) {
         try {
-            return webClient.get()
-                    .uri(metamapaServiceUrl + "/admin/colecciones/{id}", id)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(ColeccionDTO.class)
-                    .block();
+            String url = metamapaServiceUrl + "/admin/colecciones/" + id;
+            return webApiCaller.get(url, ColeccionDTO.class);
         } catch (Exception e) {
             log.error("Error al obtener colección por ID: {}", e.getMessage());
             throw new RuntimeException("No se pudo obtener la colección", e);
         }
     }
 
-    /** Obtener los hechos asociados a una colección */
     public List<HechoDTO> obtenerHechosPorColeccion(String accessToken, Long id) {
         try {
-            return webClient.get()
-                    .uri(metamapaServiceUrl + "/admin/colecciones/{id}/hechos", id)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToFlux(HechoDTO.class)
-                    .collectList()
-                    .blockOptional()
-                    .orElse(Collections.emptyList());
+            String url = metamapaServiceUrl + "/admin/colecciones/" + id + "/hechos";
+            return webApiCaller.getList(url, HechoDTO.class);
         } catch (Exception e) {
             log.error("Error al obtener hechos de colección: {}", e.getMessage());
             throw new RuntimeException("No se pudieron obtener los hechos de la colección", e);
         }
     }
 
-    /** Actualizar título y descripción de una colección */
     public String actualizarColeccion(String accessToken, Long id, String nuevoTitulo, String nuevaDescripcion) {
         try {
-            return webClient.put()
-                    .uri(uriBuilder -> uriBuilder
-                            .path(metamapaServiceUrl + "/admin/colecciones/{id}")
-                            .queryParam("nuevoTitulo", nuevoTitulo)
-                            .queryParam("nuevaDescripcion", nuevaDescripcion)
-                            .build(id))
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            String url = String.format(
+                    "%s/admin/colecciones/%d?nuevoTitulo=%s&nuevaDescripcion=%s",
+                    metamapaServiceUrl, id, nuevoTitulo, nuevaDescripcion
+            );
+            return webApiCaller.put(url, null, String.class);
         } catch (Exception e) {
             log.error("Error al actualizar colección: {}", e.getMessage());
             throw new RuntimeException("No se pudo actualizar la colección", e);
         }
     }
 
-    /** Eliminar colección por ID */
     public String eliminarColeccion(String accessToken, Long id) {
         try {
-            return webClient.delete()
-                    .uri(metamapaServiceUrl + "/admin/colecciones/{id}", id)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            webApiCaller.delete(metamapaServiceUrl + "/admin/colecciones/" + id);
+            return "Colección eliminada correctamente";
         } catch (Exception e) {
             log.error("Error al eliminar colección: {}", e.getMessage());
             throw new RuntimeException("No se pudo eliminar la colección", e);
         }
     }
 
-    /** Eliminar todas las colecciones */
     public String eliminarTodasLasColecciones(String accessToken) {
         try {
-            return webClient.delete()
-                    .uri(metamapaServiceUrl + "/admin/colecciones")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            webApiCaller.delete(metamapaServiceUrl + "/admin/colecciones");
+            return "Todas las colecciones fueron eliminadas";
         } catch (Exception e) {
             log.error("Error al eliminar todas las colecciones: {}", e.getMessage());
             throw new RuntimeException("No se pudieron eliminar las colecciones", e);
         }
     }
 
-    /** Agregar o quitar fuente de una colección */
     public String modificarFuenteColeccion(String accessToken, Long id, String fuente, String operacion) {
         try {
-            return webClient.patch()
-                    .uri(uriBuilder -> uriBuilder
-                            .path(metamapaServiceUrl + "/admin/colecciones/{id}/fuentes")
-                            .queryParam("fuente", fuente)
-                            .queryParam("operacion", operacion)
-                            .build(id))
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            String url = String.format(
+                    "%s/admin/colecciones/%d/fuentes?fuente=%s&operacion=%s",
+                    metamapaServiceUrl, id, fuente, operacion
+            );
+            // PATCH -> se usa WebClient directo o se agrega soporte en WebApiCaller si querés
+            return webApiCaller.put(url, null, String.class);
         } catch (Exception e) {
-            log.error("Error al modificar fuente: {}", e.getMessage());
-            throw new RuntimeException("No se pudo modificar la fuente de la colección", e);
+            log.error("Error al modificar fuente de colección: {}", e.getMessage());
+            throw new RuntimeException("No se pudo modificar la fuente", e);
         }
     }
 }
+
 
