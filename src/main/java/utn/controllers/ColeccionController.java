@@ -32,7 +32,7 @@ public class ColeccionController {
 
         String accessToken = (String) session.getAttribute("accessToken");
 
-        List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones(accessToken);
+        List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
         //List<ColeccionDTO> colecciones = coleccionService.obtenerTodasLasColecciones();
         model.addAttribute("colecciones", colecciones);
 
@@ -46,9 +46,9 @@ public class ColeccionController {
 
         try {
 
-            String accessToken = (String) session.getAttribute("accessToken");
 
-            ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(accessToken,id);
+
+            ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
             model.addAttribute("hechos", coleccion.getHechos());
             model.addAttribute("titulo", coleccion.getTitulo());

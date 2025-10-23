@@ -32,8 +32,8 @@ public class HomeController {
 
         try {
             // Llamar al servicio pasando el token
-            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos(accessToken);
-            List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones(accessToken);
+            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
+            List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
             List<ColeccionDTO> coleccionesDestacadas = colecciones.stream().limit(3).toList();
 
             // Seleccionar los primeros 3 hechos como destacados

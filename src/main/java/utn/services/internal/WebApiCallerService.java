@@ -12,6 +12,8 @@ import utn.exceptions.NotFoundException;
 import utn.models.dto.AuthResponseDTO;
 import utn.models.dto.RefreshTokenDTO;
 
+import java.util.List;
+
 @Service
 public class WebApiCallerService {
 
@@ -57,6 +59,39 @@ public class WebApiCallerService {
             throw new RuntimeException("Error en llamada al API: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new RuntimeException("Error de conexión con el servicio: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Ejecuta una llamada HTTP GET pública (sin token)
+     */
+    public <T> T getPublic(String url, Class<T> responseType) {
+        try {
+            return webClient
+                    .get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(responseType)
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException("Error en llamada pública al API: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Ejecuta una llamada HTTP GET pública que retorna una lista
+     */
+    public <T> List<T> getListPublic(String url, Class<T> responseType) {
+        try {
+            return webClient
+                    .get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToFlux(responseType)
+                    .collectList()
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException("Error en llamada pública al API: " + e.getMessage(), e);
         }
     }
 

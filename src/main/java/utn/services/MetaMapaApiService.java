@@ -39,11 +39,10 @@ public class MetaMapaApiService {
         this.metamapaServiceUrl = metamapaServiceUrl;
     }
 
+    // ====== LOGIN ======
     public AuthResponseDTO login(String username, String password) {
         try {
             Map<String, String> body = Map.of("username", username, "password", password);
-
-            // login sin usar WebApiCaller porque no hay token todavía
             return WebClient.builder().build()
                     .post()
                     .uri(authServiceUrl + "/auth")
@@ -53,120 +52,80 @@ public class MetaMapaApiService {
                     .block();
         } catch (Exception e) {
             log.error("Error en login: {}", e.getMessage());
-            throw new RuntimeException("Error al autenticar: " + e.getMessage(), e);
+            throw new RuntimeException("Error al autenticar", e);
         }
     }
 
-    // ====== HECHOS ======
-    public List<HechoDTO> obtenerTodosLosHechos(String accessToken) {
-        String url = (accessToken != null && !accessToken.isBlank())
-                ? metamapaServiceUrl + "/admin/hechos"
-                : metamapaServiceUrl + "/hechos";
-        try {
-            return webApiCaller.getList(url, HechoDTO.class);
-        } catch (Exception e) {
-            log.error("Error al obtener hechos: {}", e.getMessage());
-            throw new RuntimeException("No se pudieron obtener los hechos", e);
-        }
+    // ====== HECHOS PÚBLICOS ======
+    public List<HechoDTO> obtenerTodosLosHechos() {
+        return safeGetListPublic(metamapaServiceUrl + "/hechos", HechoDTO.class);
     }
 
-    public RolesPermisosDTO getRolesPermisos(String accessToken) {
-        try {
-            String url = authServiceUrl + "/auth/user/roles-permisos";
-            return webApiCaller.getWithAuth(url, accessToken, RolesPermisosDTO.class);
-        } catch (Exception e) {
-            log.error("Error al obtener roles y permisos: {}", e.getMessage());
-            throw new RuntimeException("Error al obtener roles y permisos", e);
-        }
+    // ====== COLECCIONES PÚBLICAS ======
+    public List<ColeccionDTO> obtenerColecciones() {
+        return safeGetListPublic(metamapaServiceUrl + "/admin/colecciones", ColeccionDTO.class);
     }
 
-    // ====== COLECCIONES ======
+    public ColeccionDTO obtenerColeccionPorId(Long id) {
+        return safeGetPublic(metamapaServiceUrl + "/admin/colecciones/" + id, ColeccionDTO.class);
+    }
 
+    public List<HechoDTO> obtenerHechosPorColeccion(Long id) {
+        return safeGetListPublic(metamapaServiceUrl + "/admin/colecciones/" + id + "/hechos", HechoDTO.class);
+    }
+
+    // ====== COLECCIONES CON TOKEN (admin) ======
     public String crearColeccion(String accessToken, String titulo, String descripcion) {
-        try {
-            Map<String, String> body = Map.of("titulo", titulo, "descripcion", descripcion);
-            return webApiCaller.post(metamapaServiceUrl + "/admin/colecciones", body, String.class);
-        } catch (Exception e) {
-            log.error("Error al crear colección: {}", e.getMessage());
-            throw new RuntimeException("No se pudo crear la colección", e);
-        }
-    }
-
-    public List<ColeccionDTO> obtenerColecciones(String accessToken) {
-        try {
-            return webApiCaller.getList(metamapaServiceUrl + "/admin/colecciones", ColeccionDTO.class);
-        } catch (Exception e) {
-            log.error("Error al obtener colecciones: {}", e.getMessage());
-            throw new RuntimeException("No se pudieron obtener las colecciones", e);
-        }
-    }
-
-    public ColeccionDTO obtenerColeccionPorId(String accessToken, Long id) {
-        try {
-            String url = metamapaServiceUrl + "/admin/colecciones/" + id;
-            return webApiCaller.get(url, ColeccionDTO.class);
-        } catch (Exception e) {
-            log.error("Error al obtener colección por ID: {}", e.getMessage());
-            throw new RuntimeException("No se pudo obtener la colección", e);
-        }
-    }
-
-    public List<HechoDTO> obtenerHechosPorColeccion(String accessToken, Long id) {
-        try {
-            String url = metamapaServiceUrl + "/admin/colecciones/" + id + "/hechos";
-            return webApiCaller.getList(url, HechoDTO.class);
-        } catch (Exception e) {
-            log.error("Error al obtener hechos de colección: {}", e.getMessage());
-            throw new RuntimeException("No se pudieron obtener los hechos de la colección", e);
-        }
+        Map<String, String> body = Map.of("titulo", titulo, "descripcion", descripcion);
+        return webApiCaller.post(metamapaServiceUrl + "/admin/colecciones", body, String.class);
     }
 
     public String actualizarColeccion(String accessToken, Long id, String nuevoTitulo, String nuevaDescripcion) {
-        try {
-            String url = String.format(
-                    "%s/admin/colecciones/%d?nuevoTitulo=%s&nuevaDescripcion=%s",
-                    metamapaServiceUrl, id, nuevoTitulo, nuevaDescripcion
-            );
-            return webApiCaller.put(url, null, String.class);
-        } catch (Exception e) {
-            log.error("Error al actualizar colección: {}", e.getMessage());
-            throw new RuntimeException("No se pudo actualizar la colección", e);
-        }
+        String url = String.format("%s/admin/colecciones/%d?nuevoTitulo=%s&nuevaDescripcion=%s",
+                metamapaServiceUrl, id, nuevoTitulo, nuevaDescripcion);
+        return webApiCaller.put(url, null, String.class);
     }
 
     public String eliminarColeccion(String accessToken, Long id) {
-        try {
-            webApiCaller.delete(metamapaServiceUrl + "/admin/colecciones/" + id);
-            return "Colección eliminada correctamente";
-        } catch (Exception e) {
-            log.error("Error al eliminar colección: {}", e.getMessage());
-            throw new RuntimeException("No se pudo eliminar la colección", e);
-        }
+        webApiCaller.delete(metamapaServiceUrl + "/admin/colecciones/" + id);
+        return "Colección eliminada correctamente";
     }
 
     public String eliminarTodasLasColecciones(String accessToken) {
-        try {
-            webApiCaller.delete(metamapaServiceUrl + "/admin/colecciones");
-            return "Todas las colecciones fueron eliminadas";
-        } catch (Exception e) {
-            log.error("Error al eliminar todas las colecciones: {}", e.getMessage());
-            throw new RuntimeException("No se pudieron eliminar las colecciones", e);
-        }
+        webApiCaller.delete(metamapaServiceUrl + "/admin/colecciones");
+        return "Todas las colecciones fueron eliminadas";
     }
 
     public String modificarFuenteColeccion(String accessToken, Long id, String fuente, String operacion) {
+        String url = String.format("%s/admin/colecciones/%d/fuentes?fuente=%s&operacion=%s",
+                metamapaServiceUrl, id, fuente, operacion);
+        return webApiCaller.put(url, null, String.class);
+    }
+
+    // ====== ROLES Y PERMISOS ======
+    public RolesPermisosDTO getRolesPermisos(String accessToken) {
+        return webApiCaller.getWithAuth(authServiceUrl + "/auth/user/roles-permisos", accessToken, RolesPermisosDTO.class);
+    }
+
+    // ====== HELPERS PÚBLICOS ======
+    private <T> T safeGetPublic(String url, Class<T> responseType) {
         try {
-            String url = String.format(
-                    "%s/admin/colecciones/%d/fuentes?fuente=%s&operacion=%s",
-                    metamapaServiceUrl, id, fuente, operacion
-            );
-            // PATCH -> se usa WebClient directo o se agrega soporte en WebApiCaller si querés
-            return webApiCaller.put(url, null, String.class);
+            return webApiCaller.getPublic(url, responseType);
         } catch (Exception e) {
-            log.error("Error al modificar fuente de colección: {}", e.getMessage());
-            throw new RuntimeException("No se pudo modificar la fuente", e);
+            log.error("Error al obtener recurso público {}: {}", url, e.getMessage());
+            throw new RuntimeException("Error al obtener recurso público", e);
+        }
+    }
+
+    private <T> List<T> safeGetListPublic(String url, Class<T> responseType) {
+        try {
+            return webApiCaller.getListPublic(url, responseType);
+        } catch (Exception e) {
+            log.error("Error al obtener lista pública {}: {}", url, e.getMessage());
+            throw new RuntimeException("Error al obtener lista pública", e);
         }
     }
 }
+
 
 

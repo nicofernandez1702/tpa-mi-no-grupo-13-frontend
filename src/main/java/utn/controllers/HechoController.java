@@ -33,7 +33,7 @@ public class HechoController {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
         try {
-            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos(accessToken);
+            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
 
             model.addAttribute("hechos", hechos);
         }
