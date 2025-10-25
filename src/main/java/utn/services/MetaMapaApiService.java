@@ -67,7 +67,7 @@ public class MetaMapaApiService {
     }
 
     public ColeccionDTO obtenerColeccionPorId(Long id) {
-        return safeGetPublic(metamapaServiceUrl + "/admin/colecciones/" + id, ColeccionDTO.class);
+        return safeGetPublic(metamapaServiceUrl + "/colecciones/" + id, ColeccionDTO.class);
     }
 
     public List<HechoDTO> obtenerHechosPorColeccion(Long id) {

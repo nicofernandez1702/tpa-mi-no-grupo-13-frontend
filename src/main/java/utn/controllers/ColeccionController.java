@@ -52,9 +52,11 @@ public class ColeccionController {
 
         model.addAttribute("titulo", "Titulo de la coleccion");
 
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
         try {
-
-
 
             ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
