@@ -1,46 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MetaMapa</title>
-  <!-- Bootstrap CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<html th:replace="~{layout/base :: html}">
 
-</head>
-<body>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container">
-    <a class="navbar-brand" href="../index.html">MetaMapa</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <ul class="navbar-nav ms-auto text-center" id="nav-items">
-        <li class="nav-item my-2 w-100 w-md-auto">
-          <a class="nav-link" href="../index.html">Inicio</a>
-        </li>
-        <li class="nav-item my-2 w-100 w-md-auto">
-          <a class="nav-link" href="../colecciones/colecciones.html">Colecciones</a>
-        </li>
-        <li class="nav-item my-2 w-100 w-md-auto">
-          <a class="nav-link" href="hechos.html">Hechos</a>
-        </li>
-        <!-- Mis Hechos se agregará dinámicamente si está logeado -->
-        <li class="nav-item my-2 w-100 text-center" id="auth-buttons">
-          <!-- Estado logeado/no logeado se seteará con JS -->
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div th:fragment="contenido">
   
-  <main class="container my-5">
+  <div class="container my-5">
     <!-- Título -->
     <section class="mb-4 text-center">
       <h1 class="display-5">Mis Hechos</h1>
@@ -88,17 +50,9 @@
   </div>
 </div>
 
-  </main>
+</div>
 
+</div>
 
-  <!-- Footer -->
-  <div id="footer"></div>
-
-  <!-- Bootstrap JS CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/navbar.js"></script>
-  <script src="assets/js/footer.js"></script>
-  <script src="assets/js/datos_prueba.js"></script>
   <script src="assets/js/hechos_contribuyente.js"></script>
-</body>
 </html>

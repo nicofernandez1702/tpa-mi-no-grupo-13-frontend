@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.HechoDTO;
+import utn.models.entities.usuarios.Usuario;
 import utn.services.HechoService;
 import utn.services.MetaMapaApiService;
 
@@ -45,8 +46,13 @@ public class HechoController {
     }
 
     @GetMapping("/agregarHecho")
-    public String agregarHecho(Model model){
+    public String agregarHecho(Model model, HttpSession session) {
         model.addAttribute("titulo", "Agregar Hecho");
+
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
 
         return "hechos/nuevo_hecho";
     }
@@ -79,5 +85,20 @@ public class HechoController {
         catch (NotFoundException e) {
             return "redirect:/error";
         }
+    }
+
+    @GetMapping("/misHechos")
+    public String misHechos(Model model, HttpSession session){
+        model.addAttribute("titulo", "Mis hechos");
+
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+
+            // TODO Función del service que retorne los hechos del usuario logeado
+
+        }
+
+        return "hechos/hechos_contribuyente";
     }
 }
