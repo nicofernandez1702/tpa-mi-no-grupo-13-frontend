@@ -6,10 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
-import utn.models.dto.HechoDTO;
 import utn.services.ColeccionService;
 import utn.services.MetaMapaApiService;
 
@@ -70,5 +68,27 @@ public class ColeccionController {
             //redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());
             return "redirect:/error";
         }
+    }
+
+    @GetMapping("/{id}/editar")
+    public String editarColeccion(Model model, @PathVariable Long id, HttpSession session) {
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+
+            try {
+                ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
+
+                model.addAttribute("titulo", coleccion.getTitulo());
+                model.addAttribute("descripcion", coleccion.getDescripcion());
+            }
+            catch (NotFoundException ex) {
+                return "redirect:/error";
+            }
+        }
+        else {
+            return "redirect:/error";
+        }
+        return "admin/coleccion_editar";
     }
 }
