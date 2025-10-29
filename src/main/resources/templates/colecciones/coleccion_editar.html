@@ -1,6 +1,14 @@
 <html th:replace="~{layout/base :: html}">
   <div th:fragment="contenido">
-    <main class="container my-5">
+
+      <!-- Embed de datos -->
+      <script th:inline="javascript">
+          /*<![CDATA[*/
+          const coleccion = /*[[${coleccion}]]*/ [];
+          /*]]>*/
+      </script>
+
+    <div class="container my-5">
       <section class="text-center mb-5">
         <h1 class="display-4">Editar Colección</h1>
         <p class="text-muted">Modifica los detalles de la colección y guarda los cambios.</p>
@@ -41,11 +49,11 @@
               </select>
             </div>
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            <a href="colecciones_admin.html" class="btn btn-secondary">Cancelar</a>
+            <a href="../admin/colecciones_admin.html" class="btn btn-secondary">Cancelar</a>
           </form>
         </div>
       </section>
-    </main>
+    </div>
 
     <script th:src="@{/js/coleccion_editar.js}"></script>
   </div>

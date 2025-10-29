@@ -8,20 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const fuenteProxy = document.getElementById("fuenteProxy");
   const algoritmoSelect = document.getElementById("algoritmoConsenso");
 
-  // Obtener query param
-  const urlParams = new URLSearchParams(window.location.search);
-  const coleccionId = parseInt(urlParams.get("id"));
-  if (!coleccionId) {
-    alert("No se especificó el ID de la colección.");
-    window.location.href = "colecciones_admin.html";
-  }
-
-  // Buscar la colección en datos_prueba.js
-  const coleccion = colecciones.find(c => c.id === coleccionId);
-  if (!coleccion) {
-    alert("Colección no encontrada.");
-    window.location.href = "colecciones_admin.html";
-  }
 
   // Rellenar formulario
   tituloInput.value = coleccion.titulo;
@@ -46,11 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (fuenteDinamica.checked) fuentesSeleccionadas.push("Dinámica");
     if (fuenteProxy.checked) fuentesSeleccionadas.push("Proxy");
 
-    // Actualizar objeto coleccion
-    coleccion.titulo = tituloInput.value;
-    coleccion.descripcion = descripcionInput.value;
-    coleccion.fuentes = fuentesSeleccionadas;
-    coleccion.consenso = algoritmoSelect.value;
 
     console.log("Colección actualizada:", coleccion);
     alert("Colección guardada correctamente (simulado).");

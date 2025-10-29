@@ -79,8 +79,11 @@ public class ColeccionController {
             try {
                 ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
+                model.addAttribute("coleccion", coleccion);
                 model.addAttribute("titulo", coleccion.getTitulo());
                 model.addAttribute("descripcion", coleccion.getDescripcion());
+
+                return "colecciones/coleccion_editar";
             }
             catch (NotFoundException ex) {
                 return "redirect:/error";
@@ -89,6 +92,6 @@ public class ColeccionController {
         else {
             return "redirect:/error";
         }
-        return "admin/coleccion_editar";
+
     }
 }
