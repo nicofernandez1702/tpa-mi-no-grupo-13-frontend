@@ -39,7 +39,7 @@
                 </li>
                 <!-- Mis Hechos se agregará dinámicamente si está logeado ESTO AHORA NO ANDA, HAY QUE ADAPTARLO A THYMELEAF -->
                 <li th:if="${usuario != null}" class="nav-item my-2 me-2 text-nowrap text-center">
-                    <a class="nav-link" th:href="@{/hechos/usuario}">Mis Hechos</a>
+                    <a class="nav-link" th:href="@{/hechos/user/{usuario}(usuario=${usuario})}">Mis Hechos</a>
                 </li>
 
                 <li th:if="${usuario != null}" class="nav-item my-2 w-100 text-center">

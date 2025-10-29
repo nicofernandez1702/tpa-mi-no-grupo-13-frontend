@@ -58,7 +58,12 @@ public class HechoController {
     }
 
     @GetMapping("/{id}")
-    public String hechoPorId(Model model, @PathVariable String id){
+    public String hechoPorId(Model model, @PathVariable String id , HttpSession session) {
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
+
         try {
             HechoDTO hecho = hechoService.obtenerHechoPorId(id).get();
             model.addAttribute("hecho", hecho);
@@ -73,7 +78,13 @@ public class HechoController {
     }
 
     @GetMapping("/{id}/editar")
-    public String editarHecho(Model model, @PathVariable String id){
+    public String editarHecho(Model model, @PathVariable String id, HttpSession session) {
+
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
+
         try {
             HechoDTO hecho = hechoService.obtenerHechoPorId(id).get();
             model.addAttribute("hecho", hecho);
@@ -87,8 +98,8 @@ public class HechoController {
         }
     }
 
-    @GetMapping("/misHechos")
-    public String misHechos(Model model, HttpSession session){
+    @GetMapping("/user/{usuario}")
+    public String misHechos(Model model, @PathVariable String usuario, HttpSession session){
         model.addAttribute("titulo", "Mis hechos");
 
         String accessToken =  (String) session.getAttribute("accessToken");
