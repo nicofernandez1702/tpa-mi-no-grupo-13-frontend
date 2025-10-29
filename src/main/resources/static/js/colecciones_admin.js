@@ -3,11 +3,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.getElementById('grid-colecciones');
 
-  // Renderizar colecciones
-  function renderColecciones(lista) {
-    grid.innerHTML = "";
-    lista.forEach(c => {
-      grid.innerHTML += `
+// Renderizar colecciones TODO esta sección probablemente vuele completa, lo veré después de hacer que muestre distintas pantallas a admin y user
+    function renderColecciones(lista) {
+        grid.innerHTML = "";
+        lista.forEach(c => {
+            grid.innerHTML += `
         <div class="col">
           <div class="card h-100" data-cantidad="${c.hechos.length}" data-fecha="${c.fecha}">
             <div class="card-body d-flex flex-column">
@@ -25,27 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
-    });
+        });
 
-    // Reasignar eventos a los botones de eliminar
-    document.querySelectorAll('.btn-eliminar').forEach(boton => {
-      boton.addEventListener('click', () => {
-        const id = boton.dataset.id;
-        const titulo = boton.dataset.titulo;
+        // Reasignar eventos a los botones de eliminar
+        document.querySelectorAll('.btn-eliminar').forEach(boton => {
+            boton.addEventListener('click', () => {
+                const id = boton.dataset.id;
+                const titulo = boton.dataset.titulo;
 
-        const modalTitulo = document.getElementById('modalEliminarTitulo');
-        const modalConfirmar = document.getElementById('btnConfirmarEliminar');
+                const modalTitulo = document.getElementById('modalEliminarTitulo');
+                const modalConfirmar = document.getElementById('btnConfirmarEliminar');
 
-        modalTitulo.textContent = titulo;
-        modalConfirmar.dataset.id = id;
+                modalTitulo.textContent = titulo;
+                modalConfirmar.dataset.id = id;
 
-        const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
-        modal.show();
-      });
-    });
-  }
+                const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+                modal.show();
+            });
+        });
+    }
 
-  renderColecciones(colecciones);
+    renderColecciones(colecciones);
 
   // ========================
   // BÚSQUEDA Y ORDEN
