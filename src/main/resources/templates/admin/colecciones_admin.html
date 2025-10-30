@@ -1,89 +1,96 @@
 <html th:replace="~{layout/base :: html}">
 
-  <div th:fragment="contenido">
-      <div class="container my-5">
-        <!-- Hero de la página -->
-        <section class="text-center mb-5">
-          <h1 class="display-4">Colecciones</h1>
-          <p class="text-muted">Administra las colecciones: puedes crearlas, editarlas o eliminarlas.</p>
-          <a href="coleccion_nueva.html" class="btn btn-success">
-            <i class="bi bi-plus-lg me-2"></i>Agregar Colección
-          </a>
-        </section>
-        
-        <!-- Barra de búsqueda y orden -->
-        <section class="row mb-4 g-2 align-items-center">
-          <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Buscar colecciones por título..." id="busqueda-colecciones">
-          </div>
-          <div class="col-md-6 text-md-end">
-            <div class="btn-group" role="group" aria-label="Opciones de orden">
-              <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="alfabetico">
-                <i class="bi bi-arrow-up me-2"></i>
-                Alfabéticamente
-              </button>
-              <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="cantidad">
-                <i class="bi bi-arrow-up me-2"></i>
-                Cantidad de Hechos
-              </button>
-              <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="fecha">
-                <i class="bi bi-arrow-up me-2"></i>
-                Fecha
-              </button>
-            </div>
-          </div>
-        </section>
+<div th:fragment="contenido">
+  <div class="container my-5">
+    <!-- Hero de la página -->
+    <section class="text-center mb-5">
+      <h1 class="display-4">Colecciones</h1>
+      <p class="text-muted">Administra las colecciones: puedes crearlas, editarlas o eliminarlas.</p>
+      <a th:href="@{/colecciones/nueva}" class="btn btn-success">
+        <i class="bi bi-plus-lg me-2"></i>Agregar Colección
+      </a>
+    </section>
 
-          <div class="card-body p-0">
-              <div th:if="${colecciones.empty}" class="text-center py-5">
-                  <h3>No hay colecciones registradas</h3>
-              </div>
-          </div>
-        <!-- Grid de colecciones -->
-        <section th:unless="${colecciones.empty}" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4" id="grid-colecciones">
-          <!-- Ejemplo de card de colección -->
-          <div th:each="coleccion : ${colecciones}" class="col">
-            <div class="card h-100 shadow-sm">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Colección Ejemplo</h5>
-                <p class="card-text text-muted">Descripción breve de la colección.</p>
-                <p class="mb-1"><strong>Cantidad de hechos:</strong> 120</p>
-                <p class="mb-3"><strong>Última actualización:</strong> 12/09/2025</p>
-                <div class="mt-auto d-flex justify-content-between">
-                  <a href="../colecciones/coleccion_editar.html?id=1" class="btn btn-sm btn-primary">
-                    <i class="bi bi-pencil-square me-1"></i>Editar
-                  </a>
-                  <button class="btn btn-sm btn-danger">
-                    <i class="bi bi-trash me-1"></i>Eliminar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+    <!-- Barra de búsqueda y orden -->
+    <section class="row mb-4 g-2 align-items-center">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar colecciones por título..." id="busqueda-colecciones">
+      </div>
+      <div class="col-md-6 text-md-end">
+        <div class="btn-group" role="group" aria-label="Opciones de orden">
+          <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="alfabetico">
+            <i class="bi bi-arrow-up me-2"></i>
+            Alfabéticamente
+          </button>
+          <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="cantidad">
+            <i class="bi bi-arrow-up me-2"></i>
+            Cantidad de Hechos
+          </button>
+          <button type="button" class="btn btn-outline-primary d-flex align-items-center" data-orden="fecha">
+            <i class="bi bi-arrow-up me-2"></i>
+            Fecha
+          </button>
+        </div>
+      </div>
+    </section>
 
-          <!-- Modal de eliminación -->
-        <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Eliminar Colección</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
-                <p>¿Seguro que quieres eliminar la colección <strong id="modalEliminarTitulo"></strong>? Esta acción no se puede deshacer.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
-              </div>
+    <!-- Mensaje si no hay colecciones -->
+    <div class="card-body p-0">
+      <div th:if="${coleccionesDestacadas == null or #lists.isEmpty(coleccionesDestacadas)}" class="text-center py-5">
+        <h3>No hay colecciones registradas</h3>
+      </div>
+    </div>
+
+    <!-- Grid de colecciones -->
+    <section th:unless="${coleccionesDestacadas == null or #lists.isEmpty(coleccionesDestacadas)}"
+             class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4"
+             id="grid-colecciones">
+      <div th:each="coleccion : ${coleccionesDestacadas}" class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title" th:text="${coleccion.titulo}">Título Colección</h5>
+            <p class="card-text text-muted" th:text="${coleccion.descripcion}">Descripción de la colección</p>
+            <p class="mb-1"><strong>Cantidad de hechos:</strong> <span th:text="${#lists.size(coleccion.hechos)}"></span></p>
+            <p class="mb-3">
+              <strong>Última actualización:</strong>
+              <span th:text="${#lists.isEmpty(coleccion.hechos) ? 'N/A' : #dates.format(coleccion.hechos[0].fecha,'dd/MM/yyyy')}"></span>
+            </p>
+            <div class="mt-auto d-flex justify-content-between">
+              <a th:href="@{/colecciones/{id}/editar(id=${coleccion.id})}" class="btn btn-sm btn-primary">
+                <i class="bi bi-pencil-square me-1"></i>Editar
+              </a>
+              <button class="btn btn-sm btn-danger" th:attr="data-id=${coleccion.id}">
+                <i class="bi bi-trash me-1"></i>Eliminar
+              </button>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
+    <!-- Modal de eliminación -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">Eliminar Colección</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Seguro que quieres eliminar la colección <strong id="modalEliminarTitulo"></strong>? Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-
-    <script th:src="@{/js/colecciones_admin.js}"></script>
   </div>
+
+  <script th:src="@{/js/colecciones_admin.js}"></script>
+</div>
 </html>
+
+

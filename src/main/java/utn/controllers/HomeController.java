@@ -70,7 +70,7 @@ public class HomeController {
 
         model.addAttribute("titulo", "Panel de Control");
         model.addAttribute("usuario", session.getAttribute("username"));
-        model.addAttribute("colecciones", colecciones);
+        model.addAttribute("coleccionesDestacadas", colecciones);
         return "admin/colecciones_admin";
     }
 
