@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import utn.providers.CustomAuthProvider;
 
+
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfig {

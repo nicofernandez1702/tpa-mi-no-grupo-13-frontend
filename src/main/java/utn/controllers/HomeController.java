@@ -2,6 +2,7 @@ package utn.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,18 @@ public class HomeController {
     @GetMapping("/error")
     public String notFound() {
         return "error";
+    }
+
+    @GetMapping("/panel-control")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public String panelControl(Model model, HttpSession session) {
+
+        List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
+
+        model.addAttribute("titulo", "Panel de Control");
+        model.addAttribute("usuario", session.getAttribute("username"));
+        model.addAttribute("colecciones", colecciones);
+        return "admin/colecciones_admin";
     }
 
     @GetMapping("/perfil")
