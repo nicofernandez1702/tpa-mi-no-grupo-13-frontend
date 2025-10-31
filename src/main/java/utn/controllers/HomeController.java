@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
+import utn.models.entities.usuarios.Rol;
 import utn.services.MetaMapaApiService;
 
 import java.util.ArrayList;
@@ -27,8 +28,11 @@ public class HomeController {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             // Agrego datos de usuario
-
             model.addAttribute("usuario", session.getAttribute("username"));
+            Rol rol = (Rol) session.getAttribute("rol");
+            if (rol == Rol.ADMINISTRADOR) {
+                return "redirect:/panel-control";
+            }
         }
 
         try {
@@ -60,18 +64,6 @@ public class HomeController {
     @GetMapping("/error")
     public String notFound() {
         return "error";
-    }
-
-    @GetMapping("/panel-control")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public String panelControl(Model model, HttpSession session) {
-
-        List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
-
-        model.addAttribute("titulo", "Panel de Control");
-        model.addAttribute("usuario", session.getAttribute("username"));
-        model.addAttribute("coleccionesDestacadas", colecciones);
-        return "admin/colecciones_admin";
     }
 
     @GetMapping("/perfil")
