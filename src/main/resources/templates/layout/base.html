@@ -43,12 +43,6 @@
                     <a class="nav-link" th:href="@{/hechos/user/{usuario}(usuario=${usuario})}">Mis Hechos</a>
                 </li>
 
-                <li class="nav-item my-2 text-nowrap w-100 w-md-auto" sec:authorize="hasRole('ADMINISTRADOR')">
-                    <a class="nav-link" th:href="@{/panel-control}">
-                        Panel de Control
-                    </a>
-                </li>
-
                 <li th:if="${usuario != null}" class="nav-item my-2 w-100 text-center">
                     <div class="dropdown ">
                         <button th:text="${usuario}" class="btn btn-light dropdown-toggle d-flex mx-auto align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">

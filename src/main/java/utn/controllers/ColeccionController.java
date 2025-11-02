@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
+import utn.models.entities.usuarios.Rol;
 import utn.services.ColeccionService;
 import utn.services.MetaMapaApiService;
 
@@ -29,10 +30,6 @@ public class ColeccionController {
         model.addAttribute("titulo", "Colecciones");
         // TODO: agregar los atributos que necesitemos en el model despues de adaptarlo con thymeleaf
 
-        String accessToken =  (String) session.getAttribute("accessToken");
-        if (accessToken != null) {
-            model.addAttribute("usuario", session.getAttribute("username"));
-        }
         try {
             List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
 
@@ -40,6 +37,18 @@ public class ColeccionController {
         }
         catch (Exception e) {
             model.addAttribute("No se pudieron cargar las colecciones: ", e.getMessage());
+        }
+
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+
+            Rol rol = (Rol) session.getAttribute("rol");
+            if (rol == Rol.ADMINISTRADOR) {
+
+                // TODO: Tal vez esto lo cambiaría por un redirect y haría otro endpoint para colecciones_admin
+                return "admin/colecciones_admin";
+            }
         }
 
         return "colecciones/colecciones";
