@@ -28,18 +28,21 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ms-auto text-center" id="nav-items">
+            <ul class="navbar-nav ms-auto text-center text-nowrap" id="nav-items">
                 <li class="nav-item my-2 w-100 w-md-auto">
                     <a class="nav-link" th:href="@{/home}">Inicio</a>
                 </li>
                 <li class="nav-item my-2 w-100 w-md-auto">
                     <a class="nav-link" th:href="@{/colecciones}">Colecciones</a>
                 </li>
-                <li class="nav-item my-2 w-100 w-md-auto">
-                    <a class="nav-link" th:href="@{/hechos}">Hechos</a>
+                <li class="nav-item my-2 w-100 w-md-auto ">
+                    <a class="nav-link" th:href="@{/hechos_pendientes}">Hechos pendientes</a>
                 </li>
                 <li class="nav-item my-2 w-100 w-md-auto">
-                    <a class="nav-link" th:href="@{/solicitudes}">Solicitudes</a>
+                    <a class="nav-link" th:href="@{/solicitudes_eliminacion}">Solicitudes</a>
+                </li>
+                <li class="nav-item my-2 w-100 w-md-auto">
+                    <a class="nav-link" th:href="@{/importar_csv}">Importar CSV</a>
                 </li>
 
 

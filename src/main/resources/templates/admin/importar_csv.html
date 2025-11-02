@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<html th:replace="~{layout/base_admin :: html}">
 
-  </head>
-  <body class="d-flex flex-column min-vh-100">
-    <div id="navbar"></div>
 
-    <main class="container my-5 flex-grow-1">
+  <div th:fragment="contenido" class="d-flex flex-column min-vh-100">
+
+    <div class="container my-5 flex-grow-1">
       <section class="text-center mb-4">
         <h1 class="display-5">Importar Hechos desde CSV</h1>
         <p class="text-muted">Carga archivos CSV con hechos. El archivo puede contener más de 10.000 entradas.</p>
@@ -33,14 +25,8 @@
           <div class="mt-3" id="mensajeCarga"></div>
         </div>
       </section>
-    </main>
+    </div>
 
-    <div id="footer"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/datos_prueba.js"></script>
-    <script src="assets/js/navbar_admin.js"></script>
-    <script src="assets/js/footer.js"></script>
-    <script src="assets/js/importar_csv.js"></script>
-  </body>
+    <script th:src="@{/js/importar_csv.js}"></script>
+  </div>
 </html>
