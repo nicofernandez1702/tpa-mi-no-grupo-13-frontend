@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
+import utn.models.dto.SolicitudDTO;
 import utn.services.MetaMapaApiService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,6 +40,14 @@ public class AdminController {
         String accessToken =  (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
+        }
+        try {
+            // TODO hacer función metaMapaApiService.obtenerSolicitudesDeEliminacion()
+            List<SolicitudDTO> solicitudes = new ArrayList<>();
+            // solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
+            model.addAttribute("solicitudes", solicitudes);
+        } catch (Exception e) {
+            model.addAttribute("No se pudieron cargar las solicitudes: ", e.getMessage());
         }
 
         return "admin/solicitudes_eliminacion";
