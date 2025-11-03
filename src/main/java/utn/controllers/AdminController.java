@@ -32,6 +32,8 @@ public class AdminController {
         return "admin/control_panel";
     }
 
+    // TODO Anotacion: Probablemente falle cuando hayan solicitudes de prueba porque en el template uso datos del hecho
+    //  correspondiente a la solicitud, y en el DTO no viene el hecho como objeto, sino como String */
     @GetMapping("/solicitudes_eliminacion")
     public String solicitudes(Model model, HttpSession session) {
 
