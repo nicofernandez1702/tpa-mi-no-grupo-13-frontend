@@ -1,68 +1,68 @@
 <html th:replace="~{layout/base :: html}">
 <div th:fragment="contenido">
-<div>
-  <section class="container my-5">
-    <section class="text-center mb-4">
-      <h1 class="display-4">Nuevo Hecho</h1>
-      <p class="lead">Completa el formulario para reportar un nuevo hecho en el mapa.</p>
+  <div>
+    <section class="container my-5">
+      <section class="text-center mb-4">
+        <h1 class="display-4">Nuevo Hecho</h1>
+        <p class="lead">Completa el formulario para reportar un nuevo hecho en el mapa.</p>
+      </section>
+
+      <!-- Formulario -->
+      <form id="form-nuevo-hecho" enctype="multipart/form-data" th:action="@{/hechos/nuevo}" method="post">
+        <!-- Título -->
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título</label>
+          <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-3">
+          <label for="categoria" class="form-label">Categoría</label>
+          <select class="form-select" id="categoria" name="categoria" required>
+            <option value="">Selecciona una categoría</option>
+            <option value="inundacion">Inundación</option>
+            <option value="incendio">Incendio</option>
+            <option value="protesta">Protesta</option>
+            <option value="accidente">Accidente</option>
+          </select>
+        </div>
+
+        <!-- Fecha -->
+        <div class="mb-3">
+          <label for="fecha" class="form-label">Fecha</label>
+          <input type="datetime-local" class="form-control" id="fecha" name="fecha" required>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="mb-3">
+          <label class="form-label">Ubicación</label>
+          <div id="mapa-ubicacion" style="height: 400px; width: 100%; border-radius: 0.5rem;"></div>
+          <input type="hidden" id="latitud" name="latitud">
+          <input type="hidden" id="longitud" name="longitud">
+          <p class="form-text">Haz clic en el mapa para seleccionar la ubicación del hecho.</p>
+        </div>
+
+        <!-- Imagen -->
+        <div class="mb-3">
+          <label for="archivo" class="form-label">Imagen</label>
+          <input type="file" class="form-control" id="archivo" name="archivo" accept="image/*">
+        </div>
+
+        <!-- Botón -->
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary">Publicar Hecho</button>
+        </div>
+      </form>
     </section>
-
-    <!-- Formulario -->
-    <form id="form-nuevo-hecho">
-      <!-- Título -->
-      <div class="mb-3">
-        <label for="titulo" class="form-label">Título</label>
-        <input type="text" class="form-control" id="titulo" name="titulo" required>
-      </div>
-
-      <!-- Descripción -->
-      <div class="mb-3">
-        <label for="descripcion" class="form-label">Descripción</label>
-        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
-      </div>
-
-      <!-- Categoría -->
-      <div class="mb-3">
-        <label for="categoria" class="form-label">Categoría</label>
-        <select class="form-select" id="categoria" name="categoria" required>
-          <option value="">Selecciona una categoría</option>
-          <option value="inundacion">Inundación</option>
-          <option value="incendio">Incendio</option>
-          <option value="protesta">Protesta</option>
-          <option value="accidente">Accidente</option>
-          <!-- más categorías -->
-        </select>
-      </div>
-
-      <!-- Fecha -->
-      <div class="mb-3">
-        <label for="fecha" class="form-label">Fecha</label>
-        <input type="date" class="form-control" id="fecha" name="fecha" required>
-      </div>
-
-      <!-- Ubicación -->
-      <div class="mb-3">
-        <label class="form-label">Ubicación</label>
-        <div id="mapa-ubicacion" style="height: 400px; width: 100%; border-radius: 0.5rem;"></div>
-        <input type="hidden" id="latitud" name="latitud">
-        <input type="hidden" id="longitud" name="longitud">
-        <p class="form-text">Haz clic en el mapa para seleccionar la ubicación del hecho.</p>
-      </div>
-
-      <!-- Multimedia -->
-      <div class="mb-3">
-        <label for="multimedia" class="form-label">Imagen</label>
-        <input type="file" class="form-control" id="multimedia" name="multimedia" accept="image/*">
-      </div>
-
-      <!-- Botón -->
-      <div class="text-end">
-        <button type="submit" class="btn btn-primary">Publicar Hecho</button>
-      </div>
-    </form>
-  </section>
-</div>
+  </div>
 
   <script th:src="@{/js/nuevo_hecho.js}"></script>
 </div>
 </html>
+

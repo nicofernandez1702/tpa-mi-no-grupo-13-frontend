@@ -3,9 +3,12 @@ package utn.services.internal;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import utn.exceptions.NotFoundException;
@@ -153,6 +156,23 @@ public class WebApiCallerService {
                         .uri(url)
                         .header("Authorization", "Bearer " + accessToken)
                         .bodyValue(body)
+                        .retrieve()
+                        .bodyToMono(responseType)
+                        .block()
+        );
+    }
+
+    /**
+     * Ejecuta una llamada HTTP POST con multipart/form-data
+     */
+    public <T> T postMultipart(String url, MultiValueMap<String, Object> body, Class<T> responseType) {
+        return executeWithTokenRetry(accessToken ->
+                webClient
+                        .post()
+                        .uri(url)
+                        .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .body(BodyInserters.fromMultipartData(body))
                         .retrieve()
                         .bodyToMono(responseType)
                         .block()

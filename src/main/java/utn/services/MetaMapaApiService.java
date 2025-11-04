@@ -4,15 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import utn.models.dto.AuthResponseDTO;
-import utn.models.dto.ColeccionDTO;
-import utn.models.dto.HechoDTO;
-import utn.models.dto.RolesPermisosDTO;
+import utn.models.dto.*;
 import utn.services.internal.WebApiCallerService;
 
 import java.util.Arrays;
@@ -28,15 +28,18 @@ public class MetaMapaApiService {
     private final WebApiCallerService webApiCaller;
     private final String authServiceUrl;
     private final String metamapaServiceUrl;
+    private final String dinamicaServiceUrl;
 
     @Autowired
     public MetaMapaApiService(
             WebApiCallerService webApiCaller,
             @Value("${auth.service.url}") String authServiceUrl,
-            @Value("${metamapa.service.url}") String metamapaServiceUrl) {
+            @Value("${metamapa.service.url}") String metamapaServiceUrl,
+            @Value("${metamapa.dinamica.url}") String dinamicaServiceUrl) {
         this.webApiCaller = webApiCaller;
         this.authServiceUrl = authServiceUrl;
         this.metamapaServiceUrl = metamapaServiceUrl;
+        this.dinamicaServiceUrl = dinamicaServiceUrl;
     }
 
     // ====== LOGIN ======
@@ -64,6 +67,35 @@ public class MetaMapaApiService {
     public HechoDTO obtenerHechoPorId(Long id) {
         return safeGetPublic(metamapaServiceUrl + "/hechos/" + id, HechoDTO.class);
     }
+
+    // ====== CREAR HECHO ======
+    public String crearHecho(HechoFormDTO hechoFormDTO) {
+        try {
+            MultiValueMap<String, Object> data = new LinkedMultiValueMap<>();
+            data.add("titulo", hechoFormDTO.getTitulo());
+            data.add("descripcion", hechoFormDTO.getDescripcion());
+            data.add("categoria", hechoFormDTO.getCategoria());
+            data.add("latitud", String.valueOf(hechoFormDTO.getLatitud()));
+            data.add("longitud", String.valueOf(hechoFormDTO.getLongitud()));
+            data.add("fecha", hechoFormDTO.getFecha().toString());
+
+            if (hechoFormDTO.getArchivo() != null && !hechoFormDTO.getArchivo().isEmpty()) {
+                data.add("archivo", new ByteArrayResource(hechoFormDTO.getArchivo().getBytes()) {
+                    @Override
+                    public String getFilename() {
+                        return hechoFormDTO.getArchivo().getOriginalFilename();
+                    }
+                });
+            }
+
+            return webApiCaller.postMultipart(dinamicaServiceUrl + "/hechos", data, String.class);
+
+        } catch (Exception e) {
+            log.error("Error al crear hecho: {}", e.getMessage(), e);
+            throw new RuntimeException("Error al crear hecho", e);
+        }
+    }
+
 
     // ====== COLECCIONES PÚBLICAS ======
     public List<ColeccionDTO> obtenerColecciones() {

@@ -3,11 +3,11 @@ package utn.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.HechoDTO;
+import utn.models.dto.HechoFormDTO;
 import utn.models.entities.usuarios.Usuario;
 import utn.services.HechoService;
 import utn.services.MetaMapaApiService;
@@ -55,6 +55,17 @@ public class HechoController {
         }
 
         return "hechos/nuevo_hecho";
+    }
+
+    @PostMapping("/nuevo")
+    public String crearHecho(@ModelAttribute HechoFormDTO hechoFormDTO, RedirectAttributes redirectAttributes) {
+        try {
+            metaMapaApiService.crearHecho(hechoFormDTO);
+            redirectAttributes.addFlashAttribute("exito", "Hecho creado correctamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al crear el hecho: " + e.getMessage());
+        }
+        return "redirect:/hechos/agregarHecho";
     }
 
     @GetMapping("/{id}")
