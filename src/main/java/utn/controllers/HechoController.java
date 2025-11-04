@@ -58,14 +58,14 @@ public class HechoController {
     }
 
     @GetMapping("/{id}")
-    public String hechoPorId(Model model, @PathVariable String id , HttpSession session) {
+    public String hechoPorId(Model model, @PathVariable Long id , HttpSession session) {
         String accessToken =  (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
 
         try {
-            HechoDTO hecho = hechoService.obtenerHechoPorId(id).get();
+            HechoDTO hecho = metaMapaApiService.obtenerHechoPorId(id);
             model.addAttribute("hecho", hecho);
             model.addAttribute("titulo", hecho.getTitulo());
             model.addAttribute("ubicacion", "HACER FUNCION hecho.getUbicacion()");

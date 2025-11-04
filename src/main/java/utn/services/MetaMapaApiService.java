@@ -61,6 +61,10 @@ public class MetaMapaApiService {
         return safeGetListPublic(metamapaServiceUrl + "/hechos", HechoDTO.class);
     }
 
+    public HechoDTO obtenerHechoPorId(Long id) {
+        return safeGetPublic(metamapaServiceUrl + "/hechos/" + id, HechoDTO.class);
+    }
+
     // ====== COLECCIONES PÚBLICAS ======
     public List<ColeccionDTO> obtenerColecciones() {
         return safeGetListPublic(metamapaServiceUrl + "/admin/colecciones", ColeccionDTO.class);
