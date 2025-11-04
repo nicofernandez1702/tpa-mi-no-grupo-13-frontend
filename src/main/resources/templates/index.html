@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <h5 class="card-title" th:text="${hecho.titulo}">Título</h5>
                             <p class="card-text" th:text="${hecho.descripcion}">Descripción</p>
-                            <a th:href="@{/hecho_detalle(id=${hecho.id})}" class="btn btn-primary w-100">Ver detalle</a>
+                            <a th:href="@{/hechos/{id}(id=${hecho.id})}" class="btn btn-primary w-100">Ver detalle</a>
                         </div>
                     </div>
                 </div>
