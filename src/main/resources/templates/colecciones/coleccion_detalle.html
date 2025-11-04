@@ -90,9 +90,14 @@
                 <li th:each="hecho : ${hechos}" class="list-group-item">
                     <h5 th:text="${hecho.titulo}">Título ejemplo</h5>
                     <p class="mb-1">Fuente: Agregar atributo fuente en los hechos para esto</p>
-                    <small th:text="${'Fecha: ' + hecho.fecha_hecho + ' | Categoría: ' + hecho.categoria}">Fecha: no encontrada | Categoría: no encontrada </small>
+                    <small th:text="${'Fecha: ' + hecho.fecha_hecho + ' | Categoría: ' + hecho.categoria}">
+                        Fecha: no encontrada | Categoría: no encontrada
+                    </small>
                     <br>
-                    <a href="../hechos/hecho_detalle.html?id=1" class="btn btn-sm btn-outline-primary mt-2">Ver detalle</a>
+                    <a th:href="@{/hechos/{id}(id=${hecho.id})}"
+                       class="btn btn-sm btn-outline-primary mt-2">
+                        Ver detalle
+                    </a>
                 </li>
             </ul>
         </section>

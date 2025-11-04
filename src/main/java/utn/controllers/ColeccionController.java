@@ -67,6 +67,8 @@ public class ColeccionController {
 
             ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
+            System.out.println("Hechos: " + coleccion.getHechos().size());
+
             model.addAttribute("hechos", coleccion.getHechos());
             model.addAttribute("titulo", coleccion.getTitulo());
             model.addAttribute("descripcion", coleccion.getDescripcion());
