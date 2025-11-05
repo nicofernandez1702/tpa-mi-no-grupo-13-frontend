@@ -76,7 +76,6 @@ public class HechoController {
             HechoDTO hecho = metaMapaApiService.obtenerHechoPorId(id);
             model.addAttribute("hecho", hecho);
             model.addAttribute("titulo", hecho.getTitulo());
-            model.addAttribute("ubicacion", "HACER FUNCION hecho.getUbicacion()");
 
             return "hechos/hecho_detalle";
         }
