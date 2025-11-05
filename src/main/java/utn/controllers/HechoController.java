@@ -9,7 +9,6 @@ import utn.exceptions.NotFoundException;
 import utn.models.dto.HechoDTO;
 import utn.models.dto.HechoFormDTO;
 import utn.models.entities.usuarios.Usuario;
-import utn.services.HechoService;
 import utn.services.MetaMapaApiService;
 
 import java.util.List;
@@ -17,12 +16,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/hechos")
 public class HechoController {
-    private HechoService hechoService;
     private MetaMapaApiService metaMapaApiService;
 
-    public HechoController(MetaMapaApiService metaMapaApiService,  HechoService hechoService) {
+    public HechoController(MetaMapaApiService metaMapaApiService) {
         this.metaMapaApiService = metaMapaApiService;
-        this.hechoService = hechoService;
     }
 
     @GetMapping
@@ -89,7 +86,7 @@ public class HechoController {
     }
 
     @GetMapping("/{id}/editar")
-    public String editarHecho(Model model, @PathVariable String id, HttpSession session) {
+    public String editarHecho(Model model, @PathVariable Long id, HttpSession session) {
 
         String accessToken =  (String) session.getAttribute("accessToken");
         if (accessToken != null) {
@@ -97,7 +94,7 @@ public class HechoController {
         }
 
         try {
-            HechoDTO hecho = hechoService.obtenerHechoPorId(id).get();
+            HechoDTO hecho = metaMapaApiService.obtenerHechoPorId(id);
             model.addAttribute("hecho", hecho);
             model.addAttribute("titulo", hecho.getTitulo() + " - Editar");
             model.addAttribute("ubicacion", "HACER FUNCION hecho.getUbicacion()");

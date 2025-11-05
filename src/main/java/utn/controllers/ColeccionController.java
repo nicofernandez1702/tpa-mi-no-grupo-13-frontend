@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
 import utn.models.entities.usuarios.Rol;
-import utn.services.ColeccionService;
 import utn.services.MetaMapaApiService;
 
 import java.util.List;
@@ -17,11 +16,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/colecciones")
 public class ColeccionController {
-    private ColeccionService coleccionService;
     private final MetaMapaApiService metaMapaApiService;
 
-    public ColeccionController(ColeccionService coleccionService, MetaMapaApiService metaMapaApiService) {
-        this.coleccionService = coleccionService;
+    public ColeccionController(MetaMapaApiService metaMapaApiService) {
         this.metaMapaApiService = metaMapaApiService;
     }
 
