@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import utn.models.dto.*;
@@ -160,6 +161,11 @@ public class MetaMapaApiService {
             log.error("Error al obtener lista pública {}: {}", url, e.getMessage());
             throw new RuntimeException("Error al obtener lista pública", e);
         }
+    }
+
+    // TODO Enviar csv a la fuente estática
+    public void importarArchivoCsv(MultipartFile archivo) {
+
     }
 }
 

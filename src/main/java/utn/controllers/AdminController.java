@@ -2,10 +2,14 @@ package utn.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
 import utn.models.dto.SolicitudDTO;
@@ -82,6 +86,18 @@ public class AdminController {
         }
 
         return "admin/importar_csv";
+    }
+
+    @PostMapping("/importar_csv")
+    public ResponseEntity<String> importarArchivo(@RequestParam("archivo") MultipartFile archivo) {
+        try {
+            // delegamos toda la lógica al servicio
+            metaMapaApiService.importarArchivoCsv(archivo);
+            return ResponseEntity.ok("Archivo enviado correctamente al backend real");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al procesar el archivo: " + e.getMessage());
+        }
     }
 
 }
