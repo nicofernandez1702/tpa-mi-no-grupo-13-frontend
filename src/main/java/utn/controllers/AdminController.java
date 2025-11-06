@@ -40,20 +40,19 @@ public class AdminController {
     //  correspondiente a la solicitud, y en el DTO no viene el hecho como objeto, sino como String */
     @GetMapping("/solicitudes_eliminacion")
     public String solicitudes(Model model, HttpSession session) {
-
         model.addAttribute("titulo", "Solicitudes");
 
-        String accessToken =  (String) session.getAttribute("accessToken");
+        String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
+
         try {
-            // TODO hacer función metaMapaApiService.obtenerSolicitudesDeEliminacion()
-            List<SolicitudDTO> solicitudes = new ArrayList<>();
-            // solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
-            model.addAttribute("solicitudes", solicitudes);
+            List<SolicitudDTO> solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
+            model.addAttribute("solicitudes", solicitudes != null ? solicitudes : List.of());
         } catch (Exception e) {
-            model.addAttribute("No se pudieron cargar las solicitudes: ", e.getMessage());
+            model.addAttribute("solicitudes", List.of());
+            model.addAttribute("errorCarga", "No se pudieron cargar las solicitudes: " + e.getMessage());
         }
 
         return "admin/solicitudes_eliminacion";

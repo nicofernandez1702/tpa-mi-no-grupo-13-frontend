@@ -102,6 +102,11 @@ public class MetaMapaApiService {
         return webApiCaller.post(metamapaServiceUrl + "/solicitudes", solicitud, String.class);
     }
 
+    public List<SolicitudDTO> obtenerSolicitudesDeEliminacion() {
+
+        return webApiCaller.getList(metamapaServiceUrl + "/admin/solicitudes", SolicitudDTO.class);
+
+    }
 
     // ====== COLECCIONES PÚBLICAS ======
     public List<ColeccionDTO> obtenerColecciones() {
@@ -172,6 +177,8 @@ public class MetaMapaApiService {
     public void importarArchivoCsv(MultipartFile archivo) {
 
     }
+
+
 }
 
 
