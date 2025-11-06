@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class SolicitudDTO {
+    private Long id;
     private LocalDateTime fechaCreacion;
     private String estado;
 

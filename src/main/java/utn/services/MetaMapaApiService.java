@@ -108,6 +108,16 @@ public class MetaMapaApiService {
 
     }
 
+    public void aceptarSolicitudEliminacion(Long id) {
+        String url = metamapaServiceUrl + "/admin/solicitudes/" + id;
+        webApiCaller.post(url, "aceptar", Void.class);
+    }
+
+    public void rechazarSolicitudEliminacion(Long id) {
+        String url = metamapaServiceUrl + "/admin/solicitudes/" + id;
+        webApiCaller.post(url, "rechazar", Void.class);
+    }
+
     // ====== COLECCIONES PÚBLICAS ======
     public List<ColeccionDTO> obtenerColecciones() {
         return safeGetListPublic(metamapaServiceUrl + "/admin/colecciones", ColeccionDTO.class);
@@ -177,6 +187,7 @@ public class MetaMapaApiService {
     public void importarArchivoCsv(MultipartFile archivo) {
 
     }
+
 
 
 }

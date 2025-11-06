@@ -48,18 +48,24 @@
                                 </a>
                             </div>
 
-                            <!-- Aprobar -->
+                            <!-- ACEPTAR -->
                             <div class="col-6 col-md-auto">
-                                <button class="btn btn-primary w-100" title="Aprobar">
-                                    <i class="bi bi-check-circle fs-5 mx-2"></i>
-                                </button>
+                                <form th:action="@{'/solicitudes_eliminacion/' + ${solicitud.id} + '/aceptar'}"
+                                      method="post" style="display:inline">
+                                    <button type="submit" class="btn btn-primary w-100" title="Aprobar">
+                                        <i class="bi bi-check-circle fs-5 mx-2"></i>
+                                    </button>
+                                </form>
                             </div>
 
-                            <!-- Rechazar -->
+                            <!-- RECHAZAR -->
                             <div class="col-6 col-md-auto">
-                                <button class="btn btn-danger w-100" title="Rechazar">
-                                    <i class="bi bi-x-circle fs-5 mx-2"></i>
-                                </button>
+                                <form th:action="@{'/solicitudes_eliminacion/' + ${solicitud.id} + '/rechazar'}"
+                                      method="post" style="display:inline">
+                                    <button type="submit" class="btn btn-danger w-100" title="Rechazar">
+                                        <i class="bi bi-x-circle fs-5 mx-2"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </li>
