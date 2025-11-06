@@ -77,6 +77,20 @@ public class HomeController {
 
         return "perfil";
     }
+
+    @GetMapping("/legal-&-privacy")
+    public String legalPrivacy (Model model, HttpSession session) {
+        model.addAttribute("titulo", "Privacidad y Legal");
+
+        // Obtener el accessToken de la sesión
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            // Agrego datos de usuario
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
+
+        return "legales";
+    }
 }
 
 
