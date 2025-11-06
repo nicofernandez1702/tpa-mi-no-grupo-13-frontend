@@ -26,6 +26,7 @@ public class MetaMapaApiService {
 
     private static final Logger log = LoggerFactory.getLogger(MetaMapaApiService.class);
 
+    private final UploadService uploadService;
     private final WebApiCallerService webApiCaller;
     private final String authServiceUrl;
     private final String metamapaServiceUrl;
@@ -33,10 +34,12 @@ public class MetaMapaApiService {
 
     @Autowired
     public MetaMapaApiService(
+            UploadService uploadService,
             WebApiCallerService webApiCaller,
             @Value("${auth.service.url}") String authServiceUrl,
             @Value("${metamapa.service.url}") String metamapaServiceUrl,
             @Value("${metamapa.dinamica.url}") String dinamicaServiceUrl) {
+        this.uploadService = uploadService;
         this.webApiCaller = webApiCaller;
         this.authServiceUrl = authServiceUrl;
         this.metamapaServiceUrl = metamapaServiceUrl;
@@ -72,24 +75,21 @@ public class MetaMapaApiService {
     // ====== CREAR HECHO ======
     public String crearHecho(HechoFormDTO hechoFormDTO) {
         try {
-            MultiValueMap<String, Object> data = new LinkedMultiValueMap<>();
-            data.add("titulo", hechoFormDTO.getTitulo());
-            data.add("descripcion", hechoFormDTO.getDescripcion());
-            data.add("categoria", hechoFormDTO.getCategoria());
-            data.add("latitud", String.valueOf(hechoFormDTO.getLatitud()));
-            data.add("longitud", String.valueOf(hechoFormDTO.getLongitud()));
-            data.add("fecha", hechoFormDTO.getFecha().toString());
+            HechoDTO hechoDTO = new HechoDTO();
+            hechoDTO.setTitulo(hechoFormDTO.getTitulo());
+            hechoDTO.setDescripcion(hechoFormDTO.getDescripcion());
+            hechoDTO.setCategoria(hechoFormDTO.getCategoria());
+            hechoDTO.setLatitud(hechoFormDTO.getLatitud());
+            hechoDTO.setLongitud(hechoFormDTO.getLongitud());
+            hechoDTO.setFecha_hecho(hechoFormDTO.getFecha());
 
             if (hechoFormDTO.getArchivo() != null && !hechoFormDTO.getArchivo().isEmpty()) {
-                data.add("archivo", new ByteArrayResource(hechoFormDTO.getArchivo().getBytes()) {
-                    @Override
-                    public String getFilename() {
-                        return hechoFormDTO.getArchivo().getOriginalFilename();
-                    }
-                });
+                String pathMultimedia = uploadService.guardarArchivo(hechoFormDTO.getArchivo());
+                hechoDTO.setMultimediaPath(pathMultimedia);
+                System.out.println("Multimedia del hecho enviandose: " + pathMultimedia);
             }
 
-            return webApiCaller.postMultipart(dinamicaServiceUrl + "/hechos", data, String.class);
+            return webApiCaller.post(dinamicaServiceUrl + "/hechos", hechoDTO, String.class);
 
         } catch (Exception e) {
             log.error("Error al crear hecho: {}", e.getMessage(), e);
