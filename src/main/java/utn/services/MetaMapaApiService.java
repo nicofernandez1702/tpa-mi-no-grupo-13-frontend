@@ -97,6 +97,11 @@ public class MetaMapaApiService {
         }
     }
 
+    // ====== SOLICITUD DE ELIMINACION ======
+    public String crearSolicitud(SolicitudDTO solicitud) {
+        return webApiCaller.post(metamapaServiceUrl + "/solicitudes", solicitud, String.class);
+    }
+
 
     // ====== COLECCIONES PÚBLICAS ======
     public List<ColeccionDTO> obtenerColecciones() {

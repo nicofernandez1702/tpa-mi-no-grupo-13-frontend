@@ -65,6 +65,10 @@ public class HechoController {
         return "redirect:/hechos/agregarHecho";
     }
 
+
+
+
+
     @GetMapping("/{id}")
     public String hechoPorId(Model model, @PathVariable Long id , HttpSession session) {
         String accessToken =  (String) session.getAttribute("accessToken");

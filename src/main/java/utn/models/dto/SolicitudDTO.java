@@ -16,7 +16,5 @@ public class SolicitudDTO {
 
     private final String motivo;
 
-    // TODO los datos debajo de esta línea no están en el DTO en el back, hay que agregarlos
-    private String solicitante;
 
 }

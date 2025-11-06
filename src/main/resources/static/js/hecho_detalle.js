@@ -1,28 +1,34 @@
-// hecho_detalle.js
+btnEnviar.addEventListener("click", async () => {
+    const motivo = justificacion.value.trim();
 
-// 4. Inicializar Leaflet en la ubicación del hecho
-// Se requiere que los hechos tengan lat/lng en los datos de prueba
-const coords = [ hecho.latitud, hecho.longitud ]; // fallback
-const map = L.map("mapa-detalle").setView(coords, 13);
+    const solicitud = {
+        hecho: hecho.id,   // el id del hecho actual
+        motivo: motivo
+    };
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+    try {
+        const response = await fetch("/solicitudes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(solicitud)
+        });
 
-L.marker(coords)
-    .addTo(map)
-    .bindPopup(`<b>${hecho.titulo}</b><br>${""}`);
-
-
-
-// Solicitud Eliminación
-
-const justificacion = document.getElementById("justificacion");
-const contador = document.getElementById("contador");
-const btnEnviar = document.getElementById("btnEnviar");
-
-justificacion.addEventListener("input", () => {
-    const length = justificacion.value.length;
-    contador.textContent = `${length}/500 caracteres`;
-    btnEnviar.disabled = length < 500;
+        if (response.ok) {
+            const data = await response.json();
+            alert("Solicitud enviada con éxito ✅");
+            const modal = bootstrap.Modal.getInstance(document.getElementById("modalEliminar"));
+            modal.hide();
+            justificacion.value = "";
+            contador.textContent = "0/500 caracteres";
+            btnEnviar.disabled = true;
+        } else {
+            const err = await response.text();
+            alert("❌ Error al enviar la solicitud: " + err);
+        }
+    } catch (e) {
+        console.error("Error en la solicitud:", e);
+        alert("❌ Error inesperado al enviar la solicitud");
+    }
 });
