@@ -3,10 +3,10 @@ package utn.services.internal;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -174,6 +174,18 @@ public class WebApiCallerService {
                         .block()
         );
     }
+
+    public <T> T postWithoutToken(String url, Object body, Class<T> responseType) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Object> entity = new HttpEntity<>(body, headers);
+        ResponseEntity<T> response = restTemplate.postForEntity(url, entity, responseType);
+
+        return response.getBody();
+    }
+
 
     /**
      * Ejecuta una llamada HTTP POST con multipart/form-data

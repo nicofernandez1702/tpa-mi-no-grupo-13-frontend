@@ -92,16 +92,27 @@ public class MetaMapaApiService {
             if (hechoFormDTO.getArchivo() != null && !hechoFormDTO.getArchivo().isEmpty()) {
                 String pathMultimedia = uploadService.guardarArchivo(hechoFormDTO.getArchivo());
                 hechoDTO.setMultimediaPath(pathMultimedia);
-                System.out.println("Multimedia del hecho enviandose: " + pathMultimedia);
+                System.out.println("Multimedia del hecho enviándose: " + pathMultimedia);
             }
 
-            return webApiCaller.post(dinamicaServiceUrl + "/hechos", hechoDTO, String.class);
+            // Intentar con token, si existe
+            try {
+                return webApiCaller.post(dinamicaServiceUrl + "/hechos", hechoDTO, String.class);
+            } catch (RuntimeException e) {
+                // Si el error es "No hay token de acceso disponible", usar post sin token
+                if (e.getMessage() != null && e.getMessage().contains("No hay token de acceso disponible")) {
+                    System.out.println("⚠️ No hay token disponible, enviando hecho sin autenticación...");
+                    return webApiCaller.postWithoutToken(dinamicaServiceUrl + "/hechos", hechoDTO, String.class);
+                }
+                throw e;
+            }
 
         } catch (Exception e) {
             log.error("Error al crear hecho: {}", e.getMessage(), e);
             throw new RuntimeException("Error al crear hecho", e);
         }
     }
+
 
     // ====== SOLICITUD DE ELIMINACION ======
     public String crearSolicitud(SolicitudDTO solicitud) {
@@ -215,7 +226,7 @@ public class MetaMapaApiService {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        // Realizar el POST al backend real
+        // Realizar el POST al backend real TODO: Acá tendría que haber usado el webApiCaller, refactorizar más adelante
         ResponseEntity<String> response = restTemplate.postForEntity(estaticaServiceUrl + "/hechos/cargar", requestEntity, String.class);
 
         if (!response.getStatusCode().is2xxSuccessful()) {
