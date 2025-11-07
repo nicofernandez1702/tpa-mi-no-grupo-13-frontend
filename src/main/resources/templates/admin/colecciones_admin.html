@@ -53,8 +53,7 @@
             <p class="mb-1"><strong>Cantidad de hechos:</strong> <span th:text="${#lists.size(coleccion.hechos)}"></span></p>
             <p class="mb-3">
               <strong>Última actualización:</strong>
-              <span th:text="${#lists.isEmpty(coleccion.hechos) ? 'N/A' : #dates.format(coleccion.hechos[0].fecha,'dd/MM/yyyy')}"></span>
-            </p>
+              <span th:text="${#lists.isEmpty(coleccion.hechos) ? 'N/A' : #dates.format(coleccion.hechos[0].fecha_hecho, 'dd/MM/yyyy')}"></span>
             <div class="mt-auto d-flex justify-content-between">
               <a th:href="@{/colecciones/{id}/editar(id=${coleccion.id})}" class="btn btn-sm btn-primary">
                 <i class="bi bi-pencil-square me-1"></i>Editar
