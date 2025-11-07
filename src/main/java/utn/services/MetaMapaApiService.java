@@ -203,7 +203,7 @@ public class MetaMapaApiService {
         }
     }
 
-    // TODO Enviar csv a la fuente estática
+    // Enviar csv a la fuente estática
     public void importarArchivoCsv(MultipartFile archivo) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         // Crear un multipart/form-data para reenviar el archivo
@@ -223,7 +223,7 @@ public class MetaMapaApiService {
         }
     }
 
-    // Auxiliar para funcion de arriba
+    // Auxiliar para el envío de csv a fuente estática
     private static class MultipartInputStreamFileResource extends InputStreamResource {
         private final String filename;
 

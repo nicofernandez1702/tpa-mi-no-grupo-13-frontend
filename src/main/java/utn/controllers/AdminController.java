@@ -31,10 +31,17 @@ public class AdminController {
     public String panelControl(Model model, HttpSession session) {
 
         List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
+        List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
+        List<SolicitudDTO> solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
+        // TODO Obtener la cantidad de usuarios
 
         model.addAttribute("titulo", "Panel de Control");
         model.addAttribute("usuario", session.getAttribute("username"));
-        model.addAttribute("coleccionesDestacadas", colecciones);
+        model.addAttribute("cantidadColecciones", colecciones.size());
+        model.addAttribute("cantidadHechos", hechos.size());
+        model.addAttribute("cantidadUsuarios", 2); // 2 hardcodeado (user y admin)
+        model.addAttribute("cantidadSolicitudesEliminacion", solicitudes.size());
+
         return "admin/control_panel";
     }
 
