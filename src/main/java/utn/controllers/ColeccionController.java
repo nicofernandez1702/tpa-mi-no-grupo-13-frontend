@@ -79,21 +79,34 @@ public class ColeccionController {
     }
 
     @GetMapping("/nueva")
-    public String nuevaColeccion(Model model,HttpSession session) {
+    public String nuevaColeccion(Model model, HttpSession session) {
 
-        model.addAttribute("titulo", "Titulo de la coleccion");
+        model.addAttribute("titulo", "Crear nueva colección");
 
-        String accessToken =  (String) session.getAttribute("accessToken");
+        String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
-        try {
 
+        try {
+            // Traemos las listas desde el back
+            List<String> fuentes = metaMapaApiService.getFuentes();
+            List<String> algoritmos = metaMapaApiService.getAlgoritmos();
+
+            System.out.println("Hechos: " + fuentes.size());
+            System.out.println("Algoritmos: " + algoritmos.size());
+
+            // Las agregamos al modelo para que se usen en los dropdowns
+            model.addAttribute("fuentes", fuentes);
+            model.addAttribute("algoritmos", algoritmos);
+
+            // También podés agregar un DTO vacío para vincular el form
+            model.addAttribute("coleccionForm", new ColeccionDTO());
 
             return "admin/nueva_coleccion";
-        }
-        catch (NotFoundException ex) {
-            //redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());
+
+        } catch (NotFoundException ex) {
+            model.addAttribute("error", "No se pudieron cargar los datos: " + ex.getMessage());
             return "redirect:/error";
         }
     }

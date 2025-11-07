@@ -1,4 +1,4 @@
-<html th:replace="~{layout/base :: html}">
+<html th:replace="~{layout/base_admin :: html}">
 <div th:fragment="contenido">
     <div>
         <section class="container my-5">
@@ -7,8 +7,8 @@
                 <p class="lead">Completa el formulario para crear una nueva colección.</p>
             </section>
 
-            <!-- Formulario -->
             <form id="form-nueva-coleccion" th:action="@{/colecciones/nueva}" method="post">
+
                 <!-- Título -->
                 <div class="mb-3">
                     <label for="titulo" class="form-label">Título</label>
@@ -21,6 +21,34 @@
                     <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
                 </div>
 
+                <!-- Fuentes -->
+                <div class="mb-3">
+                    <label for="fuentes" class="form-label">Fuentes disponibles</label>
+                    <select class="selectpicker"
+                            id="fuentes"
+                            name="fuentes"
+                            multiple
+                            data-live-search="true"
+                            title="Selecciona una o más fuentes"
+                            required>
+                        <option th:each="fuente : ${fuentes}"
+                                th:value="${fuente}"
+                                th:text="${fuente}"></option>
+                    </select>
+                </div>
+
+                <!-- Algoritmo -->
+                <div class="mb-3">
+                    <label for="algoritmo" class="form-label">Algoritmo de consenso</label>
+                    <select class="form-select" id="algoritmo" name="algoritmo" required>
+                        <option value="" disabled selected>Selecciona un algoritmo</option>
+                        <option th:each="alg : ${algoritmos}"
+                                th:value="${alg}"
+                                th:text="${alg}"></option>
+                    </select>
+                </div>
+
+
                 <!-- Botón -->
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">Guardar Colección</button>
@@ -29,6 +57,6 @@
         </section>
     </div>
 
-    <script th:src="@{/js/nueva_coleccion.js}"></script>
 </div>
 </html>
+

@@ -161,6 +161,18 @@ public class MetaMapaApiService {
         return webApiCaller.put(url, null, String.class);
     }
 
+    // ====== CONFIG COLECCIONES ==========
+
+    public List<String> getFuentes() {
+        return webApiCaller.getList(metamapaServiceUrl + "/admin/config/fuentes", String.class);
+
+    }
+
+    public List<String> getAlgoritmos() {
+        return webApiCaller.getList(metamapaServiceUrl + "/admin/config/algoritmos", String.class);
+
+    }
+
     // ====== ROLES Y PERMISOS ======
     public RolesPermisosDTO getRolesPermisos(String accessToken) {
         return webApiCaller.getWithAuth(authServiceUrl + "/auth/user/roles-permisos", accessToken, RolesPermisosDTO.class);

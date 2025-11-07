@@ -2,6 +2,7 @@ package utn.services.internal;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -116,17 +117,28 @@ public class WebApiCallerService {
     /**
      * Ejecuta una llamada HTTP GET que retorna una lista
      */
-    public <T> java.util.List<T> getList(String url, Class<T> responseType) {
-        return executeWithTokenRetry(accessToken ->
-                webClient
+    public <T> List<T> getList(String url, Class<T> responseType) {
+        return executeWithTokenRetry(accessToken -> {
+            if (responseType.equals(String.class)) {
+                return webClient
+                        .get()
+                        .uri(url)
+                        .header("Authorization", "Bearer " + accessToken)
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                        .cast((Class<List<T>>)(Class<?>)List.class) // para compatibilidad genérica
+                        .block();
+            } else {
+                return webClient
                         .get()
                         .uri(url)
                         .header("Authorization", "Bearer " + accessToken)
                         .retrieve()
                         .bodyToFlux(responseType)
                         .collectList()
-                        .block()
-        );
+                        .block();
+            }
+        });
     }
 
     /**
