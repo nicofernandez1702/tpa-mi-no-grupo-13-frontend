@@ -78,6 +78,26 @@ public class ColeccionController {
         }
     }
 
+    @GetMapping("/nueva")
+    public String nuevaColeccion(Model model,HttpSession session) {
+
+        model.addAttribute("titulo", "Titulo de la coleccion");
+
+        String accessToken =  (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            model.addAttribute("usuario", session.getAttribute("username"));
+        }
+        try {
+
+
+            return "admin/nueva_coleccion";
+        }
+        catch (NotFoundException ex) {
+            //redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());
+            return "redirect:/error";
+        }
+    }
+
     @GetMapping("/{id}/editar")
     public String editarColeccion(Model model, @PathVariable Long id, HttpSession session) {
         String accessToken =  (String) session.getAttribute("accessToken");

@@ -1,0 +1,34 @@
+<html th:replace="~{layout/base :: html}">
+<div th:fragment="contenido">
+    <div>
+        <section class="container my-5">
+            <section class="text-center mb-4">
+                <h1 class="display-4">Nueva Colección</h1>
+                <p class="lead">Completa el formulario para crear una nueva colección.</p>
+            </section>
+
+            <!-- Formulario -->
+            <form id="form-nueva-coleccion" th:action="@{/colecciones/nueva}" method="post">
+                <!-- Título -->
+                <div class="mb-3">
+                    <label for="titulo" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" required>
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+                </div>
+
+                <!-- Botón -->
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Guardar Colección</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script th:src="@{/js/nueva_coleccion.js}"></script>
+</div>
+</html>
