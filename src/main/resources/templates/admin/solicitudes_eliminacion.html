@@ -1,106 +1,78 @@
 <html th:replace="~{layout/base_admin :: html}">
 
-  <div th:fragment="contenido" class="d-flex flex-column min-vh-100">
+<div th:fragment="contenido" class="d-flex flex-column min-vh-100">
 
     <div class="container my-5 flex-grow-1">
-      <section class="text-center mb-5">
-        <h1 class="display-4">Solicitudes de Eliminación</h1>
-        <p class="text-muted">Revisa las solicitudes de eliminación de hechos y decide su estado.</p>
-      </section>
+        <section class="text-center mb-5">
+            <h1 class="display-4">Solicitudes de Eliminación</h1>
+            <p class="text-muted">Revisa las solicitudes de eliminación de hechos y decide su estado.</p>
+        </section>
 
-        <!-- Mensaje si no hay colecciones -->
-        <div class="card-body p-0">
-            <div th:if="${solicitudes == null or #lists.isEmpty(solicitudes)}" class="text-center py-5">
-                <h3>No hay solicitudes de eliminación pendientes</h3>
+        <!-- Si no hay solicitudes -->
+        <div th:if="${solicitudes == null or #lists.isEmpty(solicitudes)}" class="text-center py-5">
+            <h3>No hay solicitudes de eliminación pendientes</h3>
+        </div>
+
+        <!-- Lista de solicitudes -->
+        <section th:unless="${solicitudes == null or #lists.isEmpty(solicitudes)}" class="row justify-content-center">
+            <div class="col-md-10">
+                <ul class="list-group">
+                    <li th:each="solicitud : ${solicitudes}"
+                        class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2">
+
+                        <!-- Información principal -->
+                        <div class="mb-2 mb-md-0">
+                            <h5 class="mb-1">Hecho ID: <span th:text="${solicitud.hecho}">1</span></h5>
+                            <small class="text-muted">
+                                Fecha de solicitud:
+                                <span th:text="${#temporals.format(solicitud.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2025</span>
+                            </small>
+                            <p class="mt-1 mb-0">
+                                <strong>Motivo:</strong>
+                                <span th:text="${solicitud.motivo}">Texto del motivo</span>
+                            </p>
+                            <p class="mt-1 mb-0">
+                                <strong>Estado:</strong>
+                                <span th:text="${solicitud.estado}">Pendiente</span>
+                            </p>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="row g-2 justify-content-md-end w-100">
+                            <!-- Ver detalle del hecho -->
+                            <div class="col-6 col-md-auto">
+                                <a th:href="@{/hechos/{id}(id=${solicitud.hecho})}"
+                                   class="btn btn-secondary w-100"
+                                   title="Ver Hecho">
+                                    <i class="bi bi-eye fs-5 mx-2"></i>
+                                </a>
+                            </div>
+
+                            <!-- ACEPTAR -->
+                            <div class="col-6 col-md-auto">
+                                <form th:action="@{'/solicitudes_eliminacion/' + ${solicitud.id} + '/aceptar'}"
+                                      method="post" style="display:inline">
+                                    <button type="submit" class="btn btn-primary w-100" title="Aprobar">
+                                        <i class="bi bi-check-circle fs-5 mx-2"></i>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- RECHAZAR -->
+                            <div class="col-6 col-md-auto">
+                                <form th:action="@{'/solicitudes_eliminacion/' + ${solicitud.id} + '/rechazar'}"
+                                      method="post" style="display:inline">
+                                    <button type="submit" class="btn btn-danger w-100" title="Rechazar">
+                                        <i class="bi bi-x-circle fs-5 mx-2"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
-        </div>
-
-      <section th:unless="${solicitudes == null or #lists.isEmpty(solicitudes)}" class="row justify-content-center">
-        <div class="col-md-10">
-            <ul id="listaSolicitudes" class="list-group">
-                <li th:each="solicitud : ${solicitudes}"
-                    class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2">
-
-                    <!-- Información principal -->
-                    <div class="mb-2 mb-md-0">
-                        <h5 class="mb-1" th:text="${solicitud.hecho.titulo}">Título del hecho</h5>
-                        <small class="text-muted">
-                            Fecha de solicitud:
-                            <span th:text="${#dates.format(solicitud.fechaSolicitud, 'dd/MM/yyyy')}">01/01/2025</span> |
-                            Solicitante:
-                            <span th:text="${solicitud.solicitante != null ? solicitud.solicitante : 'Anónimo'}">Anónimo</span>
-                        </small>
-                        <p class="mt-1 mb-0">
-                            <strong>Motivo:</strong>
-                            <span th:text="${solicitud.motivo}">Texto del motivo</span>
-                        </p>
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="row g-2 justify-content-md-end w-100">
-                        <!-- Ver hecho -->
-                        <div class="col-6 col-md-auto">
-                            <button class="btn btn-secondary w-100 btn-ver"
-                                    title="Ver Hecho"
-                                    th:attr="data-titulo=${solicitud.hecho.titulo},
-                         data-coleccion=${solicitud.hecho.coleccion.titulo},
-                         data-categoria=${solicitud.hecho.categoria},
-                         data-ubicacion=${solicitud.hecho.lugar},
-                         data-fecha=${#dates.format(solicitud.hecho.fecha, 'dd/MM/yyyy')},
-                         data-descripcion=${solicitud.hecho.descripcion},
-                         data-fuente=${solicitud.hecho.fuente},
-                         data-imagen=${solicitud.hecho.imagen}">
-                                <i class="bi bi-eye fs-5 mx-2"></i>
-                            </button>
-                        </div>
-
-                        <!-- Aprobar -->
-                        <div class="col-6 col-md-auto">
-                            <button class="btn btn-primary w-100 btn-aprobar" title="Aprobar">
-                                <i class="bi bi-check-circle fs-5 mx-2"></i>
-                            </button>
-                        </div>
-
-                        <!-- Rechazar -->
-                        <div class="col-6 col-md-auto">
-                            <button class="btn btn-danger w-100 btn-rechazar" title="Rechazar">
-                                <i class="bi bi-x-circle fs-5 mx-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-
-        </div>
-      </section>
+        </section>
     </div>
 
-  <!-- Modal de detalles del hecho -->
-      <div class="modal fade" id="modalHecho" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-lg">
-              <div class="modal-content">
-                  <div class="modal-header bg-primary text-white">
-                      <h5 class="modal-title" id="modalHechoTitulo">Detalles del Hecho</h5>
-                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                      <p><strong>Colección:</strong> <span id="modalHechoColeccion"></span></p>
-                      <p><strong>Categoría:</strong> <span id="modalHechoCategoria"></span></p>
-                      <p><strong>Ubicación:</strong> <span id="modalHechoUbicacion"></span></p>
-                      <p><strong>Fecha:</strong> <span id="modalHechoFecha"></span></p>
-                      <p><strong>Descripción:</strong> <span id="modalHechoDescripcion"></span></p>
-                      <p><strong>Fuente:</strong> <span id="modalHechoFuente"></span></p>
-                      <div class="text-center mt-3">
-                          <img id="modalHechoImagen" src="" alt="Imagen del hecho" class="img-fluid rounded" />
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-    <script th:src="@{/js/solicitudes_eliminacion.js}"></script>
-  </div>
+</div>
 </html>

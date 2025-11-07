@@ -47,20 +47,33 @@
         <!-- Modal -->
         <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <div class="modal-content">
+                <div class="modal-content shadow-lg">
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title">Solicitud de eliminación</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <p>Por favor, justifica por qué este hecho debería eliminarse. (mínimo 500 caracteres)</p>
-                        <textarea id="justificacion" class="form-control" rows="6" minlength="500" required></textarea>
-                        <small id="contador" class="text-muted">0/500 caracteres</small>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger" id="btnEnviar" disabled>Enviar solicitud</button>
-                    </div>
+
+                    <form th:action="@{/solicitudes}" method="post" id="formSolicitud" class="needs-validation" novalidate>
+                        <div class="modal-body">
+                            <input type="hidden" name="hecho" th:value="${hecho.id}"/>
+
+                            <p>Por favor, justifica por qué este hecho debería eliminarse. (mínimo 500 caracteres)</p>
+
+                            <div class="mb-3">
+                        <textarea id="motivo" name="motivo" class="form-control" rows="6"
+                                  minlength="500" required></textarea>
+                                <small id="contador" class="text-muted">0/500 caracteres</small>
+                                <div class="invalid-feedback">
+                                    Debes ingresar al menos 500 caracteres para justificar la solicitud.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger" id="btnEnviar" >Enviar solicitud</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

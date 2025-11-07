@@ -155,6 +155,7 @@ public class WebApiCallerService {
                         .post()
                         .uri(url)
                         .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(body)
                         .retrieve()
                         .bodyToMono(responseType)

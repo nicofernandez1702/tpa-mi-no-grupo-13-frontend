@@ -97,6 +97,28 @@ public class MetaMapaApiService {
         }
     }
 
+    // ====== SOLICITUD DE ELIMINACION ======
+    public String crearSolicitud(SolicitudDTO solicitud) {
+        return webApiCaller.post(metamapaServiceUrl + "/solicitudes", solicitud, String.class);
+    }
+
+    public List<SolicitudDTO> obtenerSolicitudesDeEliminacion() {
+
+        return webApiCaller.getList(metamapaServiceUrl + "/admin/solicitudes", SolicitudDTO.class);
+
+    }
+
+    public void aceptarSolicitudEliminacion(Long id) {
+        String url = metamapaServiceUrl + "/admin/solicitudes/" + id;
+        webApiCaller.post(url, "aceptar", Void.class);
+    }
+
+    public void rechazarSolicitudEliminacion(Long id) {
+        String url = metamapaServiceUrl + "/admin/solicitudes/" + id;
+        webApiCaller.post(url, "rechazar", Void.class);
+    }
+
+
 
     // ====== COLECCIONES PÚBLICAS ======
     public List<ColeccionDTO> obtenerColecciones() {

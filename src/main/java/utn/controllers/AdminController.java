@@ -7,9 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
 import utn.models.dto.SolicitudDTO;
@@ -40,23 +42,44 @@ public class AdminController {
     //  correspondiente a la solicitud, y en el DTO no viene el hecho como objeto, sino como String */
     @GetMapping("/solicitudes_eliminacion")
     public String solicitudes(Model model, HttpSession session) {
-
         model.addAttribute("titulo", "Solicitudes");
 
-        String accessToken =  (String) session.getAttribute("accessToken");
+        String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
+
         try {
-            // TODO hacer función metaMapaApiService.obtenerSolicitudesDeEliminacion()
-            List<SolicitudDTO> solicitudes = new ArrayList<>();
-            // solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
-            model.addAttribute("solicitudes", solicitudes);
+            List<SolicitudDTO> solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
+            model.addAttribute("solicitudes", solicitudes != null ? solicitudes : List.of());
         } catch (Exception e) {
-            model.addAttribute("No se pudieron cargar las solicitudes: ", e.getMessage());
+            model.addAttribute("solicitudes", List.of());
+            model.addAttribute("errorCarga", "No se pudieron cargar las solicitudes: " + e.getMessage());
         }
 
         return "admin/solicitudes_eliminacion";
+    }
+
+    @PostMapping("/solicitudes_eliminacion/{id}/aceptar")
+    public String aceptarSolicitud(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            metaMapaApiService.aceptarSolicitudEliminacion(id);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Solicitud aceptada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al aceptar la solicitud: " + e.getMessage());
+        }
+        return "redirect:/solicitudes_eliminacion";
+    }
+
+    @PostMapping("/solicitudes_eliminacion/{id}/rechazar")
+    public String rechazarSolicitud(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            metaMapaApiService.rechazarSolicitudEliminacion(id);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Solicitud rechazada correctamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al rechazar la solicitud: " + e.getMessage());
+        }
+        return "redirect:/solicitudes_eliminacion";
     }
 
     @GetMapping("/hechos_pendientes")
