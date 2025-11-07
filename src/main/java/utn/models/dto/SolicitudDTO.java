@@ -16,6 +16,5 @@ public class SolicitudDTO {
 
     private final String motivo;
 
-
 }
 
