@@ -216,7 +216,7 @@ public class MetaMapaApiService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         // Realizar el POST al backend real
-        ResponseEntity<String> response = restTemplate.postForEntity(estaticaServiceUrl + "/", requestEntity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(estaticaServiceUrl + "/hechos/cargar", requestEntity, String.class);
 
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("Error al enviar archivo al backend real: " + response.getBody());
