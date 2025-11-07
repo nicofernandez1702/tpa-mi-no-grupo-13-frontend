@@ -5,17 +5,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import utn.models.dto.*;
 import utn.services.internal.WebApiCallerService;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +34,7 @@ public class MetaMapaApiService {
     private final String authServiceUrl;
     private final String metamapaServiceUrl;
     private final String dinamicaServiceUrl;
+    private final String estaticaServiceUrl;
 
     @Autowired
     public MetaMapaApiService(
@@ -38,12 +42,14 @@ public class MetaMapaApiService {
             WebApiCallerService webApiCaller,
             @Value("${auth.service.url}") String authServiceUrl,
             @Value("${metamapa.service.url}") String metamapaServiceUrl,
-            @Value("${metamapa.dinamica.url}") String dinamicaServiceUrl) {
+            @Value("${metamapa.dinamica.url}") String dinamicaServiceUrl,
+            @Value("${metamapa.estatica.url}") String estaticaServiceUrl) {
         this.uploadService = uploadService;
         this.webApiCaller = webApiCaller;
         this.authServiceUrl = authServiceUrl;
         this.metamapaServiceUrl = metamapaServiceUrl;
         this.dinamicaServiceUrl = dinamicaServiceUrl;
+        this.estaticaServiceUrl = estaticaServiceUrl;
     }
 
     // ====== LOGIN ======
@@ -186,9 +192,45 @@ public class MetaMapaApiService {
     }
 
     // TODO Enviar csv a la fuente estática
-    public void importarArchivoCsv(MultipartFile archivo) {
+    public void importarArchivoCsv(MultipartFile archivo) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+        // Crear un multipart/form-data para reenviar el archivo
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", new MultipartInputStreamFileResource(archivo.getInputStream(), archivo.getOriginalFilename()));
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        // Realizar el POST al backend real
+        ResponseEntity<String> response = restTemplate.postForEntity(estaticaServiceUrl + "/", requestEntity, String.class);
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Error al enviar archivo al backend real: " + response.getBody());
+        }
     }
+
+    // Auxiliar para funcion de arriba
+    private static class MultipartInputStreamFileResource extends InputStreamResource {
+        private final String filename;
+
+        MultipartInputStreamFileResource(InputStream inputStream, String filename) {
+            super(inputStream);       // guarda el stream del archivo
+            this.filename = filename; // guarda el nombre real del archivo
+        }
+
+        @Override
+        public String getFilename() {
+            return this.filename;     // asegura que RestTemplate conozca el nombre
+        }
+
+        @Override
+        public long contentLength() {
+            return -1; // evita errores si no se puede determinar el tamaño exacto
+        }
+    }
+
 }
 
 
