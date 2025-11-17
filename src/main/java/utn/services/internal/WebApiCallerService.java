@@ -17,6 +17,7 @@ import utn.models.dto.AuthResponseDTO;
 import utn.models.dto.RefreshTokenDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WebApiCallerService {
@@ -234,6 +235,24 @@ public class WebApiCallerService {
                     .block();
             return null;
         });
+    }
+
+    public <T> T callGraphQL(
+            String graphqlUrl,
+            String query,
+            Map<String, Object> variables,
+            ParameterizedTypeReference<T> typeRef
+    ) {
+        return webClient.post()
+                .uri(graphqlUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(Map.of(
+                        "query", query,
+                        "variables", variables != null ? variables : Map.of()
+                ))
+                .retrieve()
+                .bodyToMono(typeRef)
+                .block();
     }
 
     /**
