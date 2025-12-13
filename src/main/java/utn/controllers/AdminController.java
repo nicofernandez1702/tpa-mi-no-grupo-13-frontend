@@ -122,7 +122,7 @@ public class AdminController {
         try {
             // delegamos toda la lógica al servicio
             metaMapaApiService.importarArchivoCsv(archivo);
-            return ResponseEntity.ok("Archivo enviado correctamente al backend real");
+            return ResponseEntity.ok("Archivo cargado correctamente");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al procesar el archivo: " + e.getMessage());

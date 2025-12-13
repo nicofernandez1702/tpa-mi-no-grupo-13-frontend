@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import utn.exceptions.NotFoundException;
+import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
 import utn.models.dto.HechoFormDTO;
 import utn.models.entities.usuarios.Usuario;
@@ -66,8 +67,14 @@ public class HechoController {
     }
 
     @GetMapping("/{id}")
-    public String hechoPorId(Model model, @PathVariable Long id , HttpSession session) {
-        String accessToken =  (String) session.getAttribute("accessToken");
+    public String hechoPorId(
+            Model model,
+            @PathVariable Long id,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String coleccionId,
+            HttpSession session) {
+
+        String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
@@ -77,7 +84,23 @@ public class HechoController {
             model.addAttribute("hecho", hecho);
             model.addAttribute("titulo", hecho.getTitulo());
 
-            return "hechos/hecho_detalle";
+            // 👉 CONTEXTO DE NAVEGACIÓN
+            if ("coleccion".equals(from) && coleccionId != null) {
+                ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(Long.valueOf(coleccionId));
+                model.addAttribute("breadcrumbLabel", coleccion.getTitulo());
+                model.addAttribute("breadcrumbUrl", "/colecciones/" + coleccionId);
+            } else {
+                model.addAttribute("breadcrumbLabel", "Mapa de hechos");
+                model.addAttribute("breadcrumbUrl", "/mapa");
+            }
+
+            model.addAttribute("contenido", "hechos/hecho_detalle");
+
+            System.out.println("from = " + from);
+            System.out.println("coleccionId = " + coleccionId);
+
+
+            return "layout/base";
         }
         catch (NotFoundException e) {
             return "redirect:/error";

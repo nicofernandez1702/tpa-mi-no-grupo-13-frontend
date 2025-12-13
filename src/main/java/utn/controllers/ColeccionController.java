@@ -66,11 +66,15 @@ public class ColeccionController {
 
             System.out.println("Hechos: " + coleccion.getHechos().size());
 
+            model.addAttribute("coleccion", coleccion);
             model.addAttribute("hechos", coleccion.getHechos());
             model.addAttribute("titulo", coleccion.getTitulo());
             model.addAttribute("descripcion", coleccion.getDescripcion());
+            model.addAttribute("contenido", "colecciones/coleccion_detalle");
 
-            return "colecciones/coleccion_detalle";
+            System.out.println(coleccion.getId());
+
+            return "layout/base";
         }
         catch (NotFoundException ex) {
             //redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());

@@ -11,6 +11,22 @@
 
     <div class="container my-5">
 
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="${breadcrumbUrl}"
+                       th:text="${breadcrumbLabel}">
+                        Origen
+                    </a>
+                </li>
+                <li class="breadcrumb-item active"
+                    aria-current="page"
+                    th:text="${hecho.titulo}">
+                    Detalle
+                </li>
+            </ol>
+        </nav>
+
         <!-- Título -->
         <section class="mb-4 text-center position-relative">
             <h1 class="display-5" th:text="${hecho.titulo}">Título del hecho</h1>
@@ -28,21 +44,36 @@
         </section>
 
         <!-- Descripción y ubicación -->
-        <section class="row mb-4">
+        <section class="row mb-4 g-4">
+
+            <!-- Descripción -->
             <div class="col-md-8">
-                <h4>Descripción</h4>
-                <p th:text="${hecho.descripcion}">
-                    Aquí va una explicación detallada del hecho, por ejemplo cómo ocurrió,
-                    cuándo, qué consecuencias tuvo, etc.
-                </p>
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3">Descripción</h4>
+                        <p class="card-text lh-lg" th:text="${hecho.descripcion}">
+                            Aquí va una explicación detallada del hecho, por ejemplo cómo ocurrió,
+                            cuándo, qué consecuencias tuvo, etc.
+                        </p>
+                    </div>
+                </div>
             </div>
 
+            <!-- Ubicación -->
             <div class="col-md-4">
-                <h4>Ubicación</h4>
-                <p th:text="${ubicacion}">Santa Fe, Argentina</p>
-                <div id="mapa-detalle" style="height: 250px; width: 100%; border-radius: 0.5rem;"></div>
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3">Ubicación</h4>
+                        <p class="fw-semibold mb-2" th:text="${ubicacion}">Santa Fe, Argentina</p>
+                        <div id="mapa-detalle"
+                             style="height: 250px; width: 100%; border-radius: 0.5rem;">
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </section>
+
 
         <!-- Modal -->
         <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
@@ -79,17 +110,12 @@
         </div>
 
         <!-- Contenido multimedia -->
-        <section class="mb-4">
+        <section class="mb-4"
+                 th:if="${hecho.multimediaPath != null and !#strings.isEmpty(hecho.multimediaPath)}">
             <h4>Imagen del hecho</h4>
-            <img th:src="@{${hecho.multimediaPath}}" alt="Imagen del hecho" class="img-fluid rounded shadow-sm">
-        </section>
-
-        <!-- Fuente TODO modificar para que el hecho tenga su fuente y la pueda mostrar -->
-        <section class="mb-4">
-            <h4>Fuente</h4>
-            <p>
-                DE MOMENTO NO TIENEN LA FUENTE LOS HECHOS, IMPLEMENTAR O QUITAR SECCIÓN
-            </p>
+            <img th:src="@{${hecho.multimediaPath}}"
+                 alt="Imagen del hecho"
+                 class="img-fluid rounded shadow-sm">
         </section>
 
     </div>

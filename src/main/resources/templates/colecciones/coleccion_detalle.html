@@ -94,8 +94,14 @@
                         Fecha: no encontrada | Categoría: no encontrada
                     </small>
                     <br>
-                    <a th:href="@{/hechos/{id}(id=${hecho.id})}"
-                       class="btn btn-sm btn-outline-primary mt-2">
+
+                    <p>DEBUG coleccionId: <span th:text="${coleccion.id}">null</span></p>
+                    <<a th:href="@{/hechos/{id}(
+        id=${hecho.id},
+        from='coleccion',
+        coleccionId=${coleccion.id}
+)}"
+                class="btn btn-sm btn-outline-primary mt-2">
                         Ver detalle
                     </a>
                 </li>
