@@ -74,6 +74,23 @@
 
         </section>
 
+        <!-- Contenido multimedia -->
+        <section class="mb-4"
+                 th:if="${hecho.multimediaPath != null and !#strings.isEmpty(hecho.multimediaPath)}">
+
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="d-flex justify-content-center">
+                        <img th:src="@{${hecho.multimediaPath}}"
+                             alt="Imagen del hecho"
+                             class="img-fluid rounded"
+                             style="max-height: 500px; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
 
         <!-- Modal -->
         <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
@@ -108,15 +125,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Contenido multimedia -->
-        <section class="mb-4"
-                 th:if="${hecho.multimediaPath != null and !#strings.isEmpty(hecho.multimediaPath)}">
-            <h4>Imagen del hecho</h4>
-            <img th:src="@{${hecho.multimediaPath}}"
-                 alt="Imagen del hecho"
-                 class="img-fluid rounded shadow-sm">
-        </section>
 
     </div>
 
