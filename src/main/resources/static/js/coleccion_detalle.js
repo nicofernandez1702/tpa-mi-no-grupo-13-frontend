@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Asegurarse de que los hechos tengan coordenadas
     const hechosConCoordenadas = hechos.map(h => ({
         ...h,
-        lat: h.lat || -31.4167,
-        lng: h.lng || -64.1833
+        lat: h.latitud || -31.4167,
+        lng: h.longitud || -64.1833
     }));
 
     actualizarMapaYLista(hechosConCoordenadas);

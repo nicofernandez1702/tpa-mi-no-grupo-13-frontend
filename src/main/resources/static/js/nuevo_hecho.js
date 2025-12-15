@@ -25,6 +25,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Manejar envío del formulario
     const form = document.getElementById("form-nuevo-hecho");
+
+    const modal = new bootstrap.Modal(
+        document.getElementById("modalResultado")
+    );
+
+    const modalTitulo = document.getElementById("modalResultadoTitulo");
+    const modalMensaje = document.getElementById("modalResultadoMensaje");
+
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
@@ -37,16 +45,37 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             if (response.ok) {
-                alert("✅ Hecho creado correctamente");
+                modalTitulo.textContent = "✅ Hecho creado";
+                modalMensaje.innerHTML = `
+                    <p>El hecho fue publicado correctamente.</p>
+                `;
+                modal.show();
                 form.reset();
+
             } else {
                 const text = await response.text();
-                alert("❌ Error al crear hecho: " + text);
+                modalTitulo.textContent = "❌ Error al crear el hecho";
+                modalMensaje.innerHTML = `
+                    <p>${text}</p>
+                `;
+                modal.show();
             }
+
         } catch (error) {
-            alert("⚠️ Error de conexión con el servidor: " + error.message);
+            modalTitulo.textContent = "⚠️ Error de conexión";
+            modalMensaje.innerHTML = `
+                <p>No se pudo conectar con el servidor.</p>
+                <small class="text-muted">${error.message}</small>
+            `;
+            modal.show();
         }
     });
+    document
+        .getElementById("modalResultado")
+        .addEventListener("hidden.bs.modal", () => {
+            window.location.href = "/hechos";
+        });
+
 });
 
 
