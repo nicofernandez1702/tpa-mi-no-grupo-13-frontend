@@ -49,7 +49,12 @@
             <!-- Descripción -->
             <div class="col-md-8">
                 <div class="card shadow-sm h-100">
-                    <div class="card-body">
+                    <div class="card-body position-relative">
+                        <!-- Fecha arriba a la derecha -->
+                        <span class="position-absolute top-0 end-0 mt-3 me-3 text-muted small"
+                              th:text="${#temporals.format(hecho.fecha_hecho, 'dd/MM/yyyy')}">
+                            01/01/2025
+                        </span>
                         <h4 class="card-title mb-3">Descripción</h4>
                         <p class="card-text lh-lg" th:text="${hecho.descripcion}">
                             Aquí va una explicación detallada del hecho, por ejemplo cómo ocurrió,
