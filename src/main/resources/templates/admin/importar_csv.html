@@ -22,7 +22,17 @@
             <button type="submit" class="btn btn-primary w-100">Importar</button>
           </form>
 
-          <div class="mt-3" id="mensajeCarga"></div>
+            <!-- Overlay de carga -->
+            <div id="overlayCarga"
+                 class="position-fixed top-0 start-0 w-100 h-100 align-items-center justify-content-center"
+                 style="background: rgba(0,0,0,0.5); z-index: 2000; display: none;">
+                <div class="text-center text-white">
+                    <div class="spinner-border text-light mb-3" role="status"></div>
+                    <p class="fs-5">Importando archivo…<br>Esto puede tardar unos minutos</p>
+                </div>
+            </div>
+
+
 
             <!-- Modal de Bootstrap -->
             <div class="modal fade" id="modalCarga" tabindex="-1" aria-labelledby="modalCargaLabel" aria-hidden="true">

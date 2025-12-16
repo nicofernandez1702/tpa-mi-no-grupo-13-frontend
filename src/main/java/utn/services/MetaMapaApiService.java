@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
@@ -12,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import utn.models.dto.*;
@@ -31,6 +33,7 @@ public class MetaMapaApiService {
 
     private final UploadService uploadService;
     private final WebApiCallerService webApiCaller;
+    private final WebClient webClient;
     private final String authServiceUrl;
     private final String metamapaServiceUrl;
     private final String dinamicaServiceUrl;
@@ -40,12 +43,14 @@ public class MetaMapaApiService {
     public MetaMapaApiService(
             UploadService uploadService,
             WebApiCallerService webApiCaller,
+            WebClient estaticaWebClient,
             @Value("${auth.service.url}") String authServiceUrl,
             @Value("${metamapa.service.url}") String metamapaServiceUrl,
             @Value("${metamapa.dinamica.url}") String dinamicaServiceUrl,
             @Value("${metamapa.estatica.url}") String estaticaServiceUrl) {
         this.uploadService = uploadService;
         this.webApiCaller = webApiCaller;
+        this.webClient = estaticaWebClient;
         this.authServiceUrl = authServiceUrl;
         this.metamapaServiceUrl = metamapaServiceUrl;
         this.dinamicaServiceUrl = dinamicaServiceUrl;
@@ -222,24 +227,27 @@ public class MetaMapaApiService {
     }
 
     // Enviar csv a la fuente estática
-    public void importarArchivoCsv(MultipartFile archivo) throws IOException {
-        RestTemplate restTemplate = new RestTemplate();
-        // Crear un multipart/form-data para reenviar el archivo
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new MultipartInputStreamFileResource(archivo.getInputStream(), archivo.getOriginalFilename()));
+    public void importarArchivoCsv(MultipartFile archivo) {
+        try {
+            webClient.post()
+                    .uri("/hechos/cargar")
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .body(BodyInserters.fromMultipartData(
+                            "file",
+                            new MultipartInputStreamFileResource(
+                                    archivo.getInputStream(),
+                                    archivo.getOriginalFilename()
+                            )
+                    ))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-
-        // Realizar el POST al backend real TODO: Acá tendría que haber usado el webApiCaller, refactorizar más adelante
-        ResponseEntity<String> response = restTemplate.postForEntity(estaticaServiceUrl + "/hechos/cargar", requestEntity, String.class);
-
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException("Error al enviar archivo al backend real: " + response.getBody());
+        } catch (IOException e) {
+            throw new RuntimeException("Error enviando CSV al backend real", e);
         }
     }
+
 
     // Auxiliar para el envío de csv a fuente estática
     private static class MultipartInputStreamFileResource extends InputStreamResource {
