@@ -13,6 +13,7 @@ import utn.models.entities.usuarios.Usuario;
 import utn.services.MetaMapaApiService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/hechos")
@@ -50,6 +51,20 @@ public class HechoController {
         String accessToken =  (String) session.getAttribute("accessToken");
         if (accessToken != null) {
             model.addAttribute("usuario", session.getAttribute("username"));
+        }
+        try {
+            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
+            List<String> categorias = hechos.stream()
+                    .map(HechoDTO::getCategoria)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .sorted()
+                    .toList();
+
+            model.addAttribute("categorias", categorias);
+        }
+        catch (Exception e) {
+            model.addAttribute("No se pudieron cargar los hechos: ", e.getMessage());
         }
 
         return "hechos/nuevo_hecho";

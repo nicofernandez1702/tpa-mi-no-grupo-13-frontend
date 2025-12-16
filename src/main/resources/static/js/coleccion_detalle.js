@@ -6,19 +6,21 @@ let markers = [];
 // === Inicializar mapa y mostrar hechos ===
 document.addEventListener("DOMContentLoaded", function () {
     mapa = L.map("mapa-coleccion").setView([-31.4167, -64.1833], 5);
+
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors"
     }).addTo(mapa);
 
-    // Asegurarse de que los hechos tengan coordenadas
-    const hechosConCoordenadas = hechos.map(h => ({
+    // Normalizar hechos UNA SOLA VEZ
+    hechosBase = hechos.map(h => ({
         ...h,
         lat: h.latitud || -31.4167,
         lng: h.longitud || -64.1833
     }));
 
-    actualizarMapaYLista(hechosConCoordenadas);
+    actualizarMapaYLista(hechosBase);
 });
+
 
 // === Función para limpiar/agregar pines y actualizar listado ===
 function actualizarMapaYLista(listaHechos) {
@@ -55,6 +57,14 @@ function actualizarMapaYLista(listaHechos) {
     }
 }
 
+// Herramienta para filtros
+function normalizarTexto(texto) {
+    return texto
+        ?.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
 // === Modo navegación ===
 const btnCurado = document.getElementById("modo-curado");
 const btnIrrestricto = document.getElementById("modo-irrestricto");
@@ -81,19 +91,41 @@ btnIrrestricto?.addEventListener("click", () => {
 document.getElementById("filtros-form")?.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const fecha = document.getElementById("filtro-fecha").value;
-    const ubicacion = document.getElementById("filtro-ubicacion").value.toLowerCase();
+    const fechaDesde = document.getElementById("filtro-fecha-desde")?.value;
+    const fechaHasta = document.getElementById("filtro-fecha-hasta")?.value;
     const categoria = document.getElementById("filtro-categoria").value;
     const fuente = document.getElementById("filtro-fuente").value;
 
-    const hechosFiltrados = hechos.filter(h => {
+    const hechosFiltrados = hechosBase.filter(h => {
         let match = true;
-        if (fecha) match = match && h.fecha_hecho === fecha;
-        if (ubicacion) match = match && (h.ubicacion?.toLowerCase().includes(ubicacion));
-        if (categoria) match = match && h.categoria === categoria;
-        if (fuente) match = match && h.fuente === fuente;
+
+        if (fechaDesde) {
+            match = match && new Date(h.fecha_hecho) >= new Date(fechaDesde);
+        }
+
+        if (fechaHasta) {
+            match = match && new Date(h.fecha_hecho) <= new Date(fechaHasta);
+        }
+
+        if (categoria) {
+            match =
+                match &&
+                normalizarTexto(h.categoria) === normalizarTexto(categoria);
+        }
+
+
+        if (fuente) {
+            match = match && h.fuente === fuente;
+        }
+
         return match;
     });
 
     actualizarMapaYLista(hechosFiltrados);
+});
+
+
+document.getElementById("limpiar-filtros")?.addEventListener("click", () => {
+    document.getElementById("filtros-form").reset();
+    actualizarMapaYLista(hechosBase);
 });

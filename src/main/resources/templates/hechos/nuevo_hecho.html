@@ -22,18 +22,21 @@
         </div>
 
         <!-- Categoría -->
-        <div class="mb-3">
-          <label for="categoria" class="form-label">Categoría</label>
-          <select class="form-select" id="categoria" name="categoria" required>
-            <option value="">Selecciona una categoría</option>
-            <option value="inundacion">Inundación</option>
-            <option value="incendio">Incendio</option>
-            <option value="protesta">Protesta</option>
-            <option value="accidente">Accidente</option>
-          </select>
-        </div>
+          <div class="mb-3">
+              <label for="categoria" class="form-label">Categoría</label>
+              <select class="form-select" id="categoria" name="categoria" required>
+                  <option value="">Selecciona una categoría</option>
 
-        <!-- Fecha -->
+                  <option th:each="cat : ${categorias}"
+                          th:value="${cat}"
+                          th:text="${cat}">
+                      Categoría
+                  </option>
+              </select>
+          </div>
+
+
+          <!-- Fecha -->
         <div class="mb-3">
           <label for="fecha" class="form-label">Fecha</label>
           <input type="datetime-local" class="form-control" id="fecha" name="fecha" required>

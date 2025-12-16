@@ -31,9 +31,15 @@
 
                     <!-- Fecha TODO modificar para que sea Desde-Hasta -->
                     <div class="col-md-3">
-                        <label for="filtro-fecha" class="form-label">Fecha</label>
-                        <input type="date" id="filtro-fecha" class="form-control">
+                        <label class="form-label">Fecha desde</label>
+                        <input type="date" id="filtro-fecha-desde" class="form-control">
                     </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha hasta</label>
+                        <input type="date" id="filtro-fecha-hasta" class="form-control">
+                    </div>
+
 
                     <!-- Ubicación -->
                     <div class="col-md-3">
@@ -46,10 +52,12 @@
                         <label for="filtro-categoria" class="form-label">Categoría</label>
                         <select id="filtro-categoria" class="form-select">
                             <option value="">Todas</option>
-                            <option value="inundacion">Inundación</option>
-                            <option value="incendio">Incendio</option>
-                            <option value="terremoto">Terremoto</option>
-                            <option value="lluvia">Lluvia</option>
+
+                            <option th:each="cat : ${categorias}"
+                                    th:value="${cat}"
+                                    th:text="${cat}">
+                                Categoría
+                            </option>
                         </select>
                     </div>
 
@@ -67,6 +75,9 @@
 
                     <!-- Botón aplicar -->
                     <div class="col-12 text-end">
+                        <button type="button" id="limpiar-filtros" class="btn btn-secondary">
+                            Limpiar
+                        </button>
                         <button type="submit" class="btn btn-success">Aplicar filtros</button>
                     </div>
                 </form>

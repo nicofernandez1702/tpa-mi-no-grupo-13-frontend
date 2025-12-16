@@ -6,10 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
+import utn.models.dto.HechoDTO;
 import utn.models.entities.usuarios.Rol;
 import utn.services.MetaMapaApiService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/colecciones")
@@ -62,8 +64,19 @@ public class ColeccionController {
 
             ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
+            // Obtener categorías únicas
+            List<String> categorias = coleccion.getHechos().stream()
+                    .map(HechoDTO::getCategoria)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .sorted()
+                    .toList();
+
+            System.out.println(categorias);
+
             System.out.println("Hechos: " + coleccion.getHechos().size());
 
+            model.addAttribute("categorias", categorias);
             model.addAttribute("coleccion", coleccion);
             model.addAttribute("hechos", coleccion.getHechos());
             model.addAttribute("titulo", coleccion.getTitulo());
