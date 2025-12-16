@@ -151,9 +151,16 @@ public class MetaMapaApiService {
     }
 
     // ====== COLECCIONES CON TOKEN (admin) ======
-    public String crearColeccion(String accessToken, String titulo, String descripcion) {
-        Map<String, String> body = Map.of("titulo", titulo, "descripcion", descripcion);
-        return webApiCaller.post(metamapaServiceUrl + "/admin/colecciones", body, String.class);
+    public String crearColeccion(String accessToken, ColeccionDTO coleccionDTO) {
+
+        System.out.println("POST → /admin/colecciones");
+        System.out.println("ColeccionDTO: " + coleccionDTO);
+
+        return webApiCaller.post(
+                metamapaServiceUrl + "/admin/colecciones",
+                coleccionDTO,
+                String.class
+        );
     }
 
     public String actualizarColeccion(String accessToken, Long id, String nuevoTitulo, String nuevaDescripcion) {

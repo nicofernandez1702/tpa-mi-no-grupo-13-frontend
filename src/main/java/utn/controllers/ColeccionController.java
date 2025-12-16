@@ -3,9 +3,7 @@ package utn.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
 import utn.models.entities.usuarios.Rol;
@@ -113,6 +111,18 @@ public class ColeccionController {
             model.addAttribute("error", "No se pudieron cargar los datos: " + ex.getMessage());
             return "redirect:/error";
         }
+    }
+
+    @PostMapping("/nueva")
+    public String crearColeccion(
+            @ModelAttribute("coleccionForm") ColeccionDTO dto,
+            HttpSession session) {
+
+        String accessToken = (String) session.getAttribute("accessToken");
+
+        metaMapaApiService.crearColeccion(accessToken,dto);
+
+        return "redirect:/colecciones";
     }
 
     @GetMapping("/{id}/editar")
