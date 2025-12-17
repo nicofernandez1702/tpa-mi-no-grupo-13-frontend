@@ -84,7 +84,7 @@ public class HechoController {
     @GetMapping("/{id}")
     public String hechoPorId(
             Model model,
-            @PathVariable Long id,
+            @PathVariable String id,
             @RequestParam(required = false) String from,
             @RequestParam(required = false) String coleccionId,
             HttpSession session) {
@@ -95,7 +95,7 @@ public class HechoController {
         }
 
         try {
-            HechoDTO hecho = metaMapaApiService.obtenerHechoPorId(id);
+            HechoDTO hecho = metaMapaApiService.obtenerHechoPorId(Long.valueOf(id));
             model.addAttribute("hecho", hecho);
             model.addAttribute("titulo", hecho.getTitulo());
 

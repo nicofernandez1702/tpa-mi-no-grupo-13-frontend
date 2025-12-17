@@ -34,7 +34,11 @@ function actualizarMapaYLista(listaHechos) {
             .addTo(mapa)
             .bindPopup(`
         <b>${h.titulo}</b><br>
-        <a href="/hechos/${h.id}" class="btn btn-sm btn-primary w-100 text-white mt-2">Ver detalle</a>
+        <a href="/hechos/${h.id}?from=coleccion&coleccionId=${coleccionId}"
+           class="btn btn-sm btn-outline-primary mt-2">
+            Ver detalle
+        </a>
+
       `);
         markers.push(marker);
     });
