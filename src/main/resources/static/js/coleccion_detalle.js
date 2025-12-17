@@ -54,7 +54,10 @@ function actualizarMapaYLista(listaHechos) {
           <p class="mb-1">Fuente: ${h.fuente || "Desconocida"}</p>
           <small>Fecha: ${h.fecha_hecho || "No disponible"} | Categoría: ${h.categoria || "Sin categoría"}</small>
           <br>
-          <a href="/hechos/${h.id}" class="btn btn-sm btn-outline-primary mt-2">Ver detalle</a>
+         <a href="/hechos/${h.id}?from=coleccion&coleccionId=${coleccionId}"
+           class="btn btn-sm btn-outline-primary mt-2">
+            Ver detalle
+        </a>
         </li>
       `;
         });

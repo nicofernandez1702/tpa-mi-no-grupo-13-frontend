@@ -106,7 +106,7 @@ public class HechoController {
                 model.addAttribute("breadcrumbUrl", "/colecciones/" + coleccionId);
             } else {
                 model.addAttribute("breadcrumbLabel", "Mapa de hechos");
-                model.addAttribute("breadcrumbUrl", "/mapa");
+                model.addAttribute("breadcrumbUrl", "/hechos");
             }
 
             model.addAttribute("contenido", "hechos/hecho_detalle");
