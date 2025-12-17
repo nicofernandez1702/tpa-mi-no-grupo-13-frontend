@@ -1,0 +1,20 @@
+package utn.models.entities;
+
+public enum Categoria {
+    VIENTOS_INTENSOS,
+    GRANIZO,
+    LLUVIA_INTENSA,
+    INUNDACION,
+    TEMPERATURAS_EXTREMAS,
+    NIEVE,
+    INCENDIO,
+    SISMO,
+    CENIZA_VOLCANICA,
+    DERRUMBE,
+    SEQUIA,
+    CRISIS_HIDRICA,
+    TEMPORAL_GENERAL,
+    TORNADO,
+    PROTESTA,
+    ACCIDENTE
+}

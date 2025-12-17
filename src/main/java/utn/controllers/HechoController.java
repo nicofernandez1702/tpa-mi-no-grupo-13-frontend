@@ -9,6 +9,7 @@ import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
 import utn.models.dto.HechoFormDTO;
+import utn.models.entities.Categoria;
 import utn.models.entities.usuarios.Usuario;
 import utn.services.MetaMapaApiService;
 
@@ -54,14 +55,8 @@ public class HechoController {
         }
         try {
             List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
-            List<String> categorias = hechos.stream()
-                    .map(HechoDTO::getCategoria)
-                    .filter(Objects::nonNull)
-                    .distinct()
-                    .sorted()
-                    .toList();
 
-            model.addAttribute("categorias", categorias);
+            model.addAttribute("categorias", Categoria.values());
         }
         catch (Exception e) {
             model.addAttribute("No se pudieron cargar los hechos: ", e.getMessage());

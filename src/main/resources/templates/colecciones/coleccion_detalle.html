@@ -62,15 +62,17 @@
                         </select>
                     </div>
 
-                    <!-- Fuente (cambiado a select) -->
+                    <!-- Fuente -->
                     <div class="col-md-3">
                         <label for="filtro-fuente" class="form-label">Fuente</label>
                         <select id="filtro-fuente" class="form-select">
                             <option value="">Todas</option>
-                            <option value="diario-ejemplo">Diario Ejemplo</option>
-                            <option value="agencia-noticias">Agencia Noticias</option>
-                            <option value="radio-local">Radio Local</option>
-                            <option value="portal-web">Portal Web</option>
+
+                            <option th:each="fuente : ${coleccion.fuentes}"
+                                    th:value="${fuente}"
+                                    th:text="${fuente}">
+                                Categoría
+                            </option>
                         </select>
                     </div>
 

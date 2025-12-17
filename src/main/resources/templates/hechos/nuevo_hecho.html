@@ -28,8 +28,8 @@
                   <option value="">Selecciona una categoría</option>
 
                   <option th:each="cat : ${categorias}"
-                          th:value="${cat}"
-                          th:text="${cat}">
+                          th:value="${cat.name()}"
+                          th:text="${cat.name()}">
                       Categoría
                   </option>
               </select>
