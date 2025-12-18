@@ -46,7 +46,10 @@
                             <!-- Aquí se mostrará la respuesta del backend -->
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                            <button type="button" class="btn btn-primary" id="btnAceptarModal">
+                                Aceptar
+                            </button>
+
                         </div>
                     </div>
                 </div>
@@ -56,6 +59,12 @@
         </div>
       </section>
     </div>
+      <script>
+          document.getElementById("btnAceptarModal").addEventListener("click", () => {
+              window.location.reload();
+          });
+      </script>
+
       <script th:src="@{/js/importar_csv.js}"></script>
 
   </div>
