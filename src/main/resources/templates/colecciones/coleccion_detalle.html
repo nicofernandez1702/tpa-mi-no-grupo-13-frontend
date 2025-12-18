@@ -43,11 +43,11 @@
                     </div>
 
 
-                    <!-- Ubicación -->
+                    <!-- Ubicación Quueda comentado por el momento, falta implementar mapeador de coordenadas->provincia
                     <div class="col-md-3">
                         <label for="filtro-ubicacion" class="form-label">Ubicación</label>
                         <input type="text" id="filtro-ubicacion" class="form-control" placeholder="Ej: Buenos Aires">
-                    </div>
+                    </div>-->
 
                     <!-- Categoría -->
                     <div class="col-md-3">
@@ -101,23 +101,11 @@
         <!-- Listado de hechos -->
         <section th:unless="${hechos.empty}">
             <h4>Listado de Hechos</h4>
-            <ul id="lista-hechos" class="list-group">
-                <li th:each="hecho : ${hechos}" class="list-group-item">
-                    <h5 th:text="${hecho.titulo}">Título ejemplo</h5>
-                    <p class="mb-1">Fuente: Agregar atributo fuente en los hechos para esto</p>
-                    <small th:text="${'Fecha: ' + hecho.fecha_hecho + ' | Categoría: ' + hecho.categoria}">
-                        Fecha: no encontrada | Categoría: no encontrada
-                    </small>
-                    <br>
+            <ul id="lista-hechos" class="list-group"></ul>
 
-                    <p>DEBUG coleccionId: <span th:text="${id}">null</span></p>
-                    <a th:href="@{/hechos/{id}(id=${hecho.id},from='coleccion',coleccionId=${id})}"
-                       class="btn btn-sm btn-outline-primary mt-2">
-                        Ver detalle
-                    </a>
-
-                </li>
-            </ul>
+            <nav>
+                <ul class="pagination" id="paginacion"></ul>
+            </nav>
         </section>
 
     </div>
