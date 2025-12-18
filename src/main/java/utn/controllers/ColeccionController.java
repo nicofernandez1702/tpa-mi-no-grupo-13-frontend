@@ -187,25 +187,21 @@ public class ColeccionController {
             return "redirect:/error";
         }
 
-        try {
-            ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
+        ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
-            // Seteamos los nuevos valores
-            coleccion.setTitulo(titulo);
-            coleccion.setDescripcion(descripcion);
-            coleccion.setFuentes(fuentes != null ? fuentes : new ArrayList<>());
-            coleccion.setAlgoritmo(algoritmoConsenso);
-            System.out.println(coleccion.getTitulo());
-            metaMapaApiService.actualizarColeccion(coleccion);
+        // Seteamos los nuevos valores
+        coleccion.setTitulo(titulo);
+        coleccion.setDescripcion(descripcion);
+        coleccion.setFuentes(fuentes != null ? fuentes : new ArrayList<>());
+        coleccion.setAlgoritmo(algoritmoConsenso);
 
-            redirectAttributes.addFlashAttribute("mensajeExito", "Colección actualizada correctamente.");
-            return "redirect:/admin/colecciones_admin";
-        } catch (NotFoundException ex) {
-            return "redirect:/error";
-        } catch (Exception ex) {
-            redirectAttributes.addFlashAttribute("mensajeError", "Error al actualizar la colección.");
-            return "redirect:/colecciones/" + id + "/editar";
-        }
+        System.out.println("Colección recibida para actualizar: " + coleccion);
+
+        metaMapaApiService.actualizarColeccion(coleccion);
+
+        redirectAttributes.addFlashAttribute("mensajeExito", "Colección actualizada correctamente.");
+        return "redirect:/colecciones";
     }
+
 
 }

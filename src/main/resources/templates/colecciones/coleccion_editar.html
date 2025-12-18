@@ -45,19 +45,10 @@
 
           <div class="mb-3">
             <label for="algoritmoConsenso" class="form-label">Algoritmo de Consenso</label>
-            <select class="form-select" id="algoritmoConsenso" name="algoritmoConsenso">
-              <option value="AlgoritmoMultiplesMenciones"
-                      th:selected="${coleccion.algoritmo == 'AlgoritmoMultiplesMenciones'}">
-                Múltiples Menciones
-              </option>
-              <option value="AlgoritmoMayoriaAbsoluta"
-                      th:selected="${coleccion.algoritmo == 'AlgoritmoMayoriaAbsoluta'}">
-                Mayoría Absoluta
-              </option>
-              <option value="AlgoritmoAleatorio"
-                      th:selected="${coleccion.algoritmo == 'AlgoritmoAleatorio'}">
-                Aleatorio
-              </option>
+            <select class="form-select" id="algoritmoConsenso" name="algoritmoConsenso" required>
+              <option value="AlgoritmoMayoriaSimple">Mayoría Simple</option>
+              <option value="AlgoritmoMayoriaAbsoluta">Mayoría Absoluta</option>
+              <option value="AlgoritmoMultiplesMenciones">Múltiples Menciones</option>
             </select>
           </div>
 

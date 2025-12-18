@@ -170,8 +170,9 @@ public class MetaMapaApiService {
 
     public String actualizarColeccion(ColeccionDTO coleccionDTO) {
         // Construimos la URL usando el id dentro del DTO
-        String url = String.format("%s/admin/colecciones/%d", metamapaServiceUrl, coleccionDTO.getId());
+        String url = String.format("%s/admin/config/colecciones/%s", metamapaServiceUrl, coleccionDTO.getId());
         // Enviamos el DTO completo como cuerpo del PUT
+        System.out.println("Actualizar coleccion: " + coleccionDTO);
         return webApiCaller.put(url, coleccionDTO, String.class);
     }
 
