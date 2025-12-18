@@ -168,10 +168,11 @@ public class MetaMapaApiService {
         );
     }
 
-    public String actualizarColeccion(String accessToken, Long id, String nuevoTitulo, String nuevaDescripcion) {
-        String url = String.format("%s/admin/colecciones/%d?nuevoTitulo=%s&nuevaDescripcion=%s",
-                metamapaServiceUrl, id, nuevoTitulo, nuevaDescripcion);
-        return webApiCaller.put(url, null, String.class);
+    public String actualizarColeccion(ColeccionDTO coleccionDTO) {
+        // Construimos la URL usando el id dentro del DTO
+        String url = String.format("%s/admin/colecciones/%d", metamapaServiceUrl, coleccionDTO.getId());
+        // Enviamos el DTO completo como cuerpo del PUT
+        return webApiCaller.put(url, coleccionDTO, String.class);
     }
 
     public String eliminarColeccion(String accessToken, Long id) {

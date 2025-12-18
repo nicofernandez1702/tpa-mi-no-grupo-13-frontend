@@ -1,60 +1,72 @@
 <html th:replace="~{layout/base :: html}">
-  <div th:fragment="contenido">
+<div th:fragment="contenido">
 
-      <!-- Embed de datos -->
-      <script th:inline="javascript">
-          /*<![CDATA[*/
-          const coleccion = /*[[${coleccion}]]*/ [];
-          /*]]>*/
-      </script>
+  <div class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="display-4">Editar Colección</h1>
+      <p class="text-muted">Modifica los detalles de la colección y guarda los cambios.</p>
+    </section>
 
-    <div class="container my-5">
-      <section class="text-center mb-5">
-        <h1 class="display-4">Editar Colección</h1>
-        <p class="text-muted">Modifica los detalles de la colección y guarda los cambios.</p>
-      </section>
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <!-- Form con POST a /colecciones/{id}/editar -->
+        <form th:action="@{'/colecciones/' + ${coleccion.id} + '/editar'}" method="post">
 
-      <section class="row justify-content-center">
-        <div class="col-md-8">
-          <form id="formColeccion">
-            <div class="mb-3">
-              <label for="tituloColeccion" class="form-label">Título</label>
-              <input type="text" class="form-control" id="tituloColeccion" required>
-            </div>
-            <div class="mb-3">
-              <label for="descripcionColeccion" class="form-label">Descripción</label>
-              <textarea class="form-control" id="descripcionColeccion" rows="3"></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Fuentes</label>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Estática" id="fuenteEstatica">
-                <label class="form-check-label" for="fuenteEstatica">Estática</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Dinámica" id="fuenteDinamica">
-                <label class="form-check-label" for="fuenteDinamica">Dinámica</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Proxy" id="fuenteProxy">
-                <label class="form-check-label" for="fuenteProxy">Proxy</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="algoritmoConsenso" class="form-label">Algoritmo de Consenso</label>
-              <select class="form-select" id="algoritmoConsenso">
-                <option value="mayoria">Mayoría</option>
-                <option value="unanimidad">Unanimidad</option>
-                <option value="random">Aleatorio</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            <a href="../admin/colecciones_admin.html" class="btn btn-secondary">Cancelar</a>
-          </form>
-        </div>
-      </section>
-    </div>
+          <div class="mb-3">
+            <label for="tituloColeccion" class="form-label">Título</label>
+            <input type="text" class="form-control" id="tituloColeccion" name="titulo"
+                   th:value="${coleccion.titulo}" required>
+          </div>
 
-    <script th:src="@{/js/coleccion_editar.js}"></script>
+          <div class="mb-3">
+            <label for="descripcionColeccion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcionColeccion" name="descripcion"
+                      rows="3" th:text="${coleccion.descripcion}"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Fuentes</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="ESTATICA" name="fuentes"
+                     id="fuenteEstatica" th:checked="${coleccion.fuentes != null and coleccion.fuentes.contains('ESTATICA')}">
+              <label class="form-check-label" for="fuenteEstatica">Estática</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="DINAMICA" name="fuentes"
+                     id="fuenteDinamica" th:checked="${coleccion.fuentes != null and coleccion.fuentes.contains('DINAMICA')}">
+              <label class="form-check-label" for="fuenteDinamica">Dinámica</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="PROXY" name="fuentes"
+                     id="fuenteProxy" th:checked="${coleccion.fuentes != null and coleccion.fuentes.contains('PROXY')}">
+              <label class="form-check-label" for="fuenteProxy">Proxy</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="algoritmoConsenso" class="form-label">Algoritmo de Consenso</label>
+            <select class="form-select" id="algoritmoConsenso" name="algoritmoConsenso">
+              <option value="AlgoritmoMultiplesMenciones"
+                      th:selected="${coleccion.algoritmo == 'AlgoritmoMultiplesMenciones'}">
+                Múltiples Menciones
+              </option>
+              <option value="AlgoritmoMayoriaAbsoluta"
+                      th:selected="${coleccion.algoritmo == 'AlgoritmoMayoriaAbsoluta'}">
+                Mayoría Absoluta
+              </option>
+              <option value="AlgoritmoAleatorio"
+                      th:selected="${coleccion.algoritmo == 'AlgoritmoAleatorio'}">
+                Aleatorio
+              </option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          <a href="../admin/colecciones_admin.html" class="btn btn-secondary">Cancelar</a>
+        </form>
+      </div>
+    </section>
   </div>
+
+</div>
 </html>

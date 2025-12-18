@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import utn.exceptions.NotFoundException;
 import utn.models.dto.ColeccionDTO;
 import utn.models.dto.HechoDTO;
 import utn.models.entities.usuarios.Rol;
 import utn.services.MetaMapaApiService;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -150,6 +153,11 @@ public class ColeccionController {
             try {
                 ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
 
+                // Asegurar que fuentes nunca sea null
+                if (coleccion.getFuentes() == null) {
+                    coleccion.setFuentes(Collections.emptyList());
+                }
+
                 model.addAttribute("coleccion", coleccion);
                 model.addAttribute("titulo", coleccion.getTitulo());
                 model.addAttribute("descripcion", coleccion.getDescripcion());
@@ -159,10 +167,45 @@ public class ColeccionController {
             catch (NotFoundException ex) {
                 return "redirect:/error";
             }
+        } else {
+            return "redirect:/error";
         }
-        else {
+    }
+
+    @PostMapping("/{id}/editar")
+    public String actualizarColeccion(
+            @PathVariable Long id,
+            @RequestParam String titulo,
+            @RequestParam String descripcion,
+            @RequestParam(required = false) List<String> fuentes,
+            @RequestParam String algoritmoConsenso,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
             return "redirect:/error";
         }
 
+        try {
+            ColeccionDTO coleccion = metaMapaApiService.obtenerColeccionPorId(id);
+
+            // Seteamos los nuevos valores
+            coleccion.setTitulo(titulo);
+            coleccion.setDescripcion(descripcion);
+            coleccion.setFuentes(fuentes != null ? fuentes : new ArrayList<>());
+            coleccion.setAlgoritmo(algoritmoConsenso);
+            System.out.println(coleccion.getTitulo());
+            metaMapaApiService.actualizarColeccion(coleccion);
+
+            redirectAttributes.addFlashAttribute("mensajeExito", "Colección actualizada correctamente.");
+            return "redirect:/admin/colecciones_admin";
+        } catch (NotFoundException ex) {
+            return "redirect:/error";
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al actualizar la colección.");
+            return "redirect:/colecciones/" + id + "/editar";
+        }
     }
+
 }
