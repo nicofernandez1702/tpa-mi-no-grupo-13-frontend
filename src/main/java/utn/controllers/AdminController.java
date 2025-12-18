@@ -31,7 +31,7 @@ public class AdminController {
     public String panelControl(Model model, HttpSession session) {
 
         List<ColeccionDTO> colecciones = metaMapaApiService.obtenerColecciones();
-        List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
+        List<HechoDTO> hechos = metaMapaApiService.obtenerHechosSinDuplicados();
         List<SolicitudDTO> solicitudes = metaMapaApiService.obtenerSolicitudesDeEliminacion();
         // TODO Obtener la cantidad de usuarios
 

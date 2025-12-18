@@ -21,10 +21,7 @@ import utn.services.internal.WebApiCallerService;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MetaMapaApiService {
@@ -82,6 +79,33 @@ public class MetaMapaApiService {
     public HechoDTO obtenerHechoPorId(Long id) {
         return safeGetPublic(metamapaServiceUrl + "/hechos/" + id, HechoDTO.class);
     }
+
+    // ====== FILTRAR HECHOS DUPLICADOS ======
+
+    public List<HechoDTO> obtenerHechosSinDuplicados() {
+        return filtrarDuplicados(safeGetListPublic(metamapaServiceUrl + "/hechos", HechoDTO.class));
+    }
+
+    public static List<HechoDTO> filtrarDuplicados(List<HechoDTO> hechos) {
+        Set<String> vistos = new HashSet<>();
+        List<HechoDTO> resultado = new ArrayList<>();
+
+        for (HechoDTO h : hechos) {
+            String clave = generarClave(h);
+            if (vistos.add(clave)) {
+                resultado.add(h);
+            }
+        }
+
+        return resultado;
+    }
+
+    private static String generarClave(HechoDTO h) {
+        return h.getTitulo() + "|" +
+                h.getCategoria() + "|" +
+                h.getFecha_hecho();
+    }
+
 
     // ====== CREAR HECHO ======
     public String crearHecho(HechoFormDTO hechoFormDTO) {

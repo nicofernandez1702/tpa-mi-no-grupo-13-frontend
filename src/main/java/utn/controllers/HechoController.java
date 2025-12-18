@@ -34,7 +34,7 @@ public class HechoController {
             model.addAttribute("usuario", session.getAttribute("username"));
         }
         try {
-            List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
+            List<HechoDTO> hechos = metaMapaApiService.obtenerHechosSinDuplicados();
 
             model.addAttribute("hechos", hechos.subList(0, Math.min(hechos.size(),800)));
         }
