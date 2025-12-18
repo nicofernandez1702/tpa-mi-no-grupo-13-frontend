@@ -80,7 +80,7 @@ public class ColeccionController {
 
             model.addAttribute("categorias", categorias);
             model.addAttribute("id", coleccion.getId());
-            model.addAttribute("hechos", hechos.subList(0,1000));
+            model.addAttribute("hechos", hechos.subList(0,Math.min(hechos.size(),800)));
             model.addAttribute("titulo", coleccion.getTitulo());
             model.addAttribute("descripcion", coleccion.getDescripcion());
             model.addAttribute("fuentes", coleccion.getFuentes());
