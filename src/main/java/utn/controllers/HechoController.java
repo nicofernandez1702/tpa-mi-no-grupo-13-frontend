@@ -36,7 +36,7 @@ public class HechoController {
         try {
             List<HechoDTO> hechos = metaMapaApiService.obtenerTodosLosHechos();
 
-            model.addAttribute("hechos", hechos);
+            model.addAttribute("hechos", hechos.subList(0, 1000));
         }
         catch (Exception e) {
             model.addAttribute("No se pudieron cargar los hechos: ", e.getMessage());

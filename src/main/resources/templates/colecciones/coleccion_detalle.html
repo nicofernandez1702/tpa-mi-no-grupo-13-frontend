@@ -5,7 +5,7 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         const hechos = /*[[${hechos}]]*/ [];
-        const coleccionId = /*[[${coleccion.id}]]*/ null;
+        const coleccionId = /*[[${id}]]*/ null;
         /*]]>*/
     </script>
 
@@ -68,7 +68,7 @@
                         <select id="filtro-fuente" class="form-select">
                             <option value="">Todas</option>
 
-                            <option th:each="fuente : ${coleccion.fuentes}"
+                            <option th:each="fuente : ${fuentes}"
                                     th:value="${fuente}"
                                     th:text="${fuente}">
                                 Categoría
@@ -109,8 +109,8 @@
                     </small>
                     <br>
 
-                    <p>DEBUG coleccionId: <span th:text="${coleccion.id}">null</span></p>
-                    <a th:href="@{/hechos/{id}(id=${hecho.id},from='coleccion',coleccionId=${coleccion.id})}"
+                    <p>DEBUG coleccionId: <span th:text="${id}">null</span></p>
+                    <a th:href="@{/hechos/{id}(id=${hecho.id},from='coleccion',coleccionId=${id})}"
                        class="btn btn-sm btn-outline-primary mt-2">
                         Ver detalle
                     </a>

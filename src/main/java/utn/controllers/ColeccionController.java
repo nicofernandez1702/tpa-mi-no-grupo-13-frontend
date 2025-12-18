@@ -76,11 +76,14 @@ public class ColeccionController {
 
             System.out.println("Hechos: " + coleccion.getHechos().size());
 
+            List<HechoDTO> hechos = coleccion.getHechos();
+
             model.addAttribute("categorias", categorias);
-            model.addAttribute("coleccion", coleccion);
-            model.addAttribute("hechos", coleccion.getHechos());
+            model.addAttribute("id", coleccion.getId());
+            model.addAttribute("hechos", hechos.subList(0,1000));
             model.addAttribute("titulo", coleccion.getTitulo());
             model.addAttribute("descripcion", coleccion.getDescripcion());
+            model.addAttribute("fuentes", coleccion.getFuentes());
             model.addAttribute("contenido", "colecciones/coleccion_detalle");
 
             System.out.println(coleccion.getId());
