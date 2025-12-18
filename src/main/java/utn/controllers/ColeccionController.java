@@ -78,7 +78,7 @@ public class ColeccionController {
             System.out.println(categorias);
 
             System.out.println("Hechos: " + coleccion.getHechos().size());
-
+            System.out.println("Fuentes: " + coleccion.getFuentes());
             List<HechoDTO> hechos = coleccion.getHechos();
 
             model.addAttribute("categorias", categorias);
